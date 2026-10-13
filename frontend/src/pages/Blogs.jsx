@@ -10,10 +10,10 @@ import { listPosts } from '../utils/posts.js';
 /** Render newest-first cards or a safe empty fallback with storage feedback.
  * @param {object} props
  * @param {import('../utils/validation.js').Session} props.session Signed-in reader.
- * @param {boolean} [props.writingAvailable=false] Enable the action only when writing is routed.
+ * @param {boolean} [props.writingAvailable=true] Enable the action only when writing is routed.
  * @returns {JSX.Element}
  */
-export default function Blogs({ session, writingAvailable = false }) {
+export default function Blogs({ session, writingAvailable = true }) {
   const [result] = useState(() => listPosts());
   const posts = result.ok ? result.value : [];
   return (
@@ -26,7 +26,7 @@ export default function Blogs({ session, writingAvailable = false }) {
       {posts.length ? (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post, index) => (
-            <PostCard key={post.id} post={post} session={session} index={index} />
+            <PostCard key={post.id} post={post} session={session} index={index} showEdit={writingAvailable} />
           ))}
         </div>
       ) : (

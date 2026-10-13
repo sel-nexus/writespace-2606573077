@@ -1,6 +1,6 @@
-/** Read browser-local plain-text posts without mutations or schema repair. */
-import { readJson } from './storage.js';
-import { failure, success, isNonEmptyString, isIsoTimestamp } from './validation.js';
+/** Read and mutate browser-local plain-text posts with fail-closed ownership checks. */
+import { readJson, writeJson } from './storage.js';
+import { failure, success, isNonEmptyString, isIsoTimestamp, isSession, isRole } from './validation.js';
 /** @typedef {{id:string,title:string,content:string,createdAt:string,authorId:string,authorName:string}} Post */
 export const POSTS_KEY = 'writespace_posts';
 const fields = ['id', 'title', 'content', 'createdAt', 'authorId', 'authorName'];
@@ -25,6 +25,70 @@ export function listPosts() {
 export function getPost(id) {
   const result = listPosts();
   return result.ok ? success(result.value.find((post) => post.id === id) ?? null) : result;
+}
+/** Validate a mutation actor without accepting a role-only session. @param {unknown} actor @returns {import('./validation.js').Result<void>} */
+function validateActor(actor) {
+  if (!isRole(actor?.role)) return failure('FORBIDDEN_ROLE', 'A user or admin session is required.');
+  return isSession(actor) ? success(null) : failure('VALIDATION', 'A valid session is required.');
+}
+/** Check owner/admin policy using valid records and a complete session. @param {Post} post @param {import('./validation.js').Session} actor @returns {boolean} */
+export function canMutatePost(post, actor) {
+  return isPost(post) && isSession(actor) && (actor.role === 'admin' || post.authorId === actor.userId);
+}
+/** Reject empty fields without changing their original text. @param {object} input @returns {import('./validation.js').Result<void>} */
+function validateInput(input) {
+  return isNonEmptyString(input?.title) && isNonEmptyString(input?.content)
+    ? success(null) : failure('VALIDATION', 'Title and content are required.');
+}
+/** Create an attributed post after a fresh valid read; never fabricate IDs. @param {{title:string,content:string}} input @param {import('./validation.js').Session} actor @returns {import('./validation.js').Result<Post>} */
+export function createPost(input, actor) {
+  const access = validateActor(actor);
+  if (!access.ok) return access;
+  const valid = validateInput(input);
+  if (!valid.ok) return valid;
+  const posts = listPosts();
+  if (!posts.ok) return posts;
+  let id;
+  try {
+    id = globalThis.crypto.randomUUID();
+    if (!isNonEmptyString(id)) throw new Error('Missing ID');
+  } catch {
+    return failure('ID_GENERATION_FAILED', 'Could not generate a post ID. Please retry in a browser with native UUID support.');
+  }
+  const post = { id, title: input.title, content: input.content, createdAt: new Date().toISOString(),
+    authorId: actor.userId, authorName: actor.displayName };
+  const saved = writeJson(POSTS_KEY, [...posts.value, post]);
+  return saved.ok ? success(post) : saved;
+}
+/** Replace only title/content after rereading and rechecking ownership. @param {string} id @param {{title:string,content:string}} input @param {import('./validation.js').Session} actor @returns {import('./validation.js').Result<Post>} */
+export function updatePost(id, input, actor) {
+  const access = validateActor(actor);
+  if (!access.ok) return access;
+  if (!isNonEmptyString(id)) return failure('VALIDATION', 'A post ID is required.');
+  const valid = validateInput(input);
+  if (!valid.ok) return valid;
+  const posts = listPosts();
+  if (!posts.ok) return posts;
+  const post = posts.value.find((item) => item.id === id);
+  if (!post) return failure('NOT_FOUND', 'Post not found');
+  if (!canMutatePost(post, actor)) return failure('FORBIDDEN_OWNER', 'You can only edit your own posts.');
+  const updated = { ...post, title: input.title, content: input.content };
+  const saved = writeJson(POSTS_KEY, posts.value.map((item) => item.id === id ? updated : item));
+  return saved.ok ? success(updated) : saved;
+}
+/** Confirm only after fresh target/access checks; cancellation never writes. @param {string} id @param {import('./validation.js').Session} actor @param {() => boolean} confirm @returns {import('./validation.js').Result<void>} */
+export function deletePost(id, actor, confirm) {
+  const access = validateActor(actor);
+  if (!access.ok) return access;
+  if (!isNonEmptyString(id) || typeof confirm !== 'function') return failure('VALIDATION', 'A post ID and confirmation callback are required.');
+  const posts = listPosts();
+  if (!posts.ok) return posts;
+  const post = posts.value.find((item) => item.id === id);
+  if (!post) return failure('NOT_FOUND', 'Post not found');
+  if (!canMutatePost(post, actor)) return failure('FORBIDDEN_OWNER', 'You can only delete your own posts.');
+  if (!confirm()) return failure('CANCELLED', 'Deletion cancelled.');
+  const saved = writeJson(POSTS_KEY, posts.value.filter((item) => item.id !== id));
+  return saved.ok ? success(null) : saved;
 }
 /** Format in UTC so saved dates do not shift with the viewer's time zone. @param {string} value @returns {string} */
 export function formatPostDate(value) {

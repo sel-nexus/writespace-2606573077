@@ -37,7 +37,9 @@ for (const role of ['user', 'admin']) {
     await expect(reader.locator('time')).toHaveAttribute('datetime', post.createdAt);
     expect(await reader.locator('p.whitespace-pre-wrap').textContent()).toBe(post.content);
     expect(await reader.locator('p.whitespace-pre-wrap').evaluate((node) => getComputedStyle(node).whiteSpace)).toBe('pre-wrap');
-    await expect(reader.locator('img, script, button, a')).toHaveCount(0);
+    await expect(reader.locator('img, script')).toHaveCount(0);
+    await expect(reader.getByRole('link', { name: 'Edit' })).toHaveAttribute('href', '/edit/p1');
+    await expect(reader.getByRole('button', { name: 'Delete' })).toBeEnabled();
     await page.reload();
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(post.title);
     expect(await reader.locator('p.whitespace-pre-wrap').textContent()).toBe(post.content);
@@ -60,8 +62,8 @@ test('empty blogs remain usable after reload with no dead writing link', async (
   await page.goto('/blogs');
   await expect(page.getByRole('heading', { name: 'All Blogs' })).toBeVisible();
   await expect(page.getByText('No posts yet. Be the first to write one!', { exact: true })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Write a Blog' })).toBeDisabled();
-  await expect(page.getByRole('link', { name: 'Write a Blog' })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Write a Blog' })).toHaveAttribute('href', '/write');
+  await expect(page.getByRole('button', { name: 'Write a Blog' })).toHaveCount(0);
   await expect(page.getByRole('article')).toHaveCount(0);
   await page.reload();
   await expect(page.getByText('No posts yet. Be the first to write one!', { exact: true })).toBeVisible();
@@ -106,7 +108,7 @@ for (const path of ['/blogs', '/blog/p1']) {
     await expect(page.getByRole('status')).toContainText('invalid format');
     if (path === '/blogs') {
       await expect(page.getByText('No posts yet. Be the first to write one!', { exact: true })).toBeVisible();
-      await expect(page.getByRole('button', { name: 'Write a Blog' })).toBeDisabled();
+      await expect(page.getByRole('link', { name: 'Write a Blog' })).toHaveAttribute('href', '/write');
     } else {
       await expect(page.getByRole('heading', { name: 'Post not found' })).toBeVisible();
       await page.getByRole('link', { name: 'Back to All Blogs' }).click();

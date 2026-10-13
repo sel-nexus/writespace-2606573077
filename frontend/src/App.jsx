@@ -9,6 +9,8 @@ import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import Blogs from './pages/Blogs.jsx';
 import BlogDetail from './pages/BlogDetail.jsx';
+import WriteBlog from './pages/WriteBlog.jsx';
+import EditBlog from './pages/EditBlog.jsx';
 import { GuestOnly, RequireAuth, RequireAdmin } from './components/RouteGuards.jsx';
 import { AuthenticatedNavbar } from './components/AuthenticatedNavbar.jsx';
 import { Alert } from './components/Alert.jsx';
@@ -46,7 +48,7 @@ AccountHome.propTypes = { session: sessionType.isRequired };
 function RouteNavbar({ session, onSessionChange }) {
   const { pathname } = useLocation();
   return session && pathname !== '/' ? (
-    <AuthenticatedNavbar session={session} onSessionChange={onSessionChange} availableFeatures={['reading']} />
+    <AuthenticatedNavbar session={session} onSessionChange={onSessionChange} availableFeatures={['reading', 'writing']} />
   ) : (
     <PublicNavbar session={session} />
   );
@@ -100,17 +102,17 @@ export default function App() {
             } />
             <Route path="/blog/:id" element={
               <RequireAuth session={session}>
-                <BlogDetail />
+                {session && <BlogDetail session={session} />}
               </RequireAuth>
             } />
             <Route path="/write" element={
               <RequireAuth session={session}>
-                <Navigate to={roleHome(session)} replace />
+                {session && <WriteBlog session={session} />}
               </RequireAuth>
             } />
             <Route path="/edit/:id" element={
               <RequireAuth session={session}>
-                <Navigate to={roleHome(session)} replace />
+                {session && <EditBlog session={session} />}
               </RequireAuth>
             } />
             <Route path="*" element={<Navigate to={roleHome(session)} replace />} />

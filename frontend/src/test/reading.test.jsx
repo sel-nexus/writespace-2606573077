@@ -43,7 +43,7 @@ it.each([user, admin])('reads sorted cards, full text and back navigation withou
   expect(card.querySelector('time')).toHaveAttribute('datetime', post.createdAt);
   expect(card.querySelector('time')).toHaveTextContent('Jan 02 2026');
   expect(card.querySelector('p.whitespace-pre-wrap').textContent).toBe(post.content.slice(0, 120));
-  expect(screen.queryByRole('link', { name: 'Write' })).not.toBeInTheDocument();
+  expect(screen.getByRole('link', { name: 'Write', exact: true })).toHaveAttribute('href', '/write');
   const actor = userEvent.setup();
   await actor.click(within(card).getByRole('link', { name: 'Read post: A browser notebook' }));
   expect(window.location.pathname).toBe('/blog/p1');
@@ -54,8 +54,8 @@ it.each([user, admin])('reads sorted cards, full text and back navigation withou
   expect(reader.querySelector('time')).toHaveTextContent('Jan 02 2026');
   expect(reader.querySelector('p.whitespace-pre-wrap').textContent).toBe(post.content);
   expect(reader.querySelector('p.whitespace-pre-wrap')).toHaveClass('whitespace-pre-wrap');
-  expect(within(reader).queryByRole('button')).not.toBeInTheDocument();
-  expect(within(reader).queryByRole('link')).not.toBeInTheDocument();
+  expect(within(reader).getByRole('button', { name: 'Delete' })).toBeEnabled();
+  expect(within(reader).getByRole('link', { name: 'Edit' })).toHaveAttribute('href', '/edit/p1');
   await actor.click(screen.getByRole('link', { name: 'Back to All Blogs' }));
   expect(window.location.pathname).toBe('/blogs');
   expect(screen.getByRole('heading', { name: 'All Blogs' })).toBeInTheDocument();
@@ -63,12 +63,12 @@ it.each([user, admin])('reads sorted cards, full text and back navigation withou
   expect(window.localStorage.getItem(POSTS_KEY)).toBe(bytes);
 });
 
-it.each(['absent', 'empty'])('shows exact %s collection empty copy with a disabled writing action', (mode) => {
+it.each(['absent', 'empty'])('shows exact %s collection empty copy with an active writing action', (mode) => {
   if (mode === 'empty') writeJson(POSTS_KEY, []);
   openApp();
   expect(screen.getByText('No posts yet. Be the first to write one!')).toBeInTheDocument();
-  expect(screen.getByRole('button', { name: 'Write a Blog' })).toBeDisabled();
-  expect(screen.queryByRole('link', { name: 'Write a Blog' })).not.toBeInTheDocument();
+  expect(screen.getByRole('link', { name: 'Write a Blog' })).toHaveAttribute('href', '/write');
+  expect(screen.queryByRole('button', { name: 'Write a Blog' })).not.toBeInTheDocument();
   expect(screen.queryByRole('status')).not.toBeInTheDocument();
   expect(screen.queryByRole('article')).not.toBeInTheDocument();
 });
@@ -115,7 +115,7 @@ for (const path of ['/blogs', '/blog/p1']) {
     expect(screen.queryByRole('article')).not.toBeInTheDocument();
     if (path === '/blogs') {
       expect(screen.getByText('No posts yet. Be the first to write one!')).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Write a Blog' })).toBeDisabled();
+      expect(screen.getByRole('link', { name: 'Write a Blog' })).toHaveAttribute('href', '/write');
     } else {
       expect(screen.getByRole('heading', { name: 'Post not found' })).toBeInTheDocument();
       expect(screen.getByRole('link', { name: 'Back to All Blogs' })).toHaveAttribute('href', '/blogs');
