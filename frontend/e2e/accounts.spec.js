@@ -20,10 +20,13 @@ test('signup, persisted home, logout, validation and normal sign-in', async ({ p
   await page.getByLabel('Username', { exact: true }).fill('avery');
   await page.getByRole('button', { name: 'Create account' }).click();
   await expect(page).toHaveURL(/\/blogs$/);
-  await expect(page.getByRole('heading', { name: 'Hello, Avery Lane.' })).toBeVisible();
-  await expect(page.getByText('user', { exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'All Blogs' })).toBeVisible();
+  await page.getByRole('button', { name: /Avery Lane/ }).click();
+  await expect(page.getByText('Signed in as user', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: /Avery Lane/ }).click();
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'Hello, Avery Lane.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'All Blogs' })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Avery Lane/ })).toBeVisible();
   const records = await page.evaluate(() => ({
     users: JSON.parse(localStorage.getItem('writespace_users')),
     session: JSON.parse(localStorage.getItem('writespace_session'))
@@ -49,7 +52,10 @@ test('signup, persisted home, logout, validation and normal sign-in', async ({ p
   await expect(page.getByRole('alert')).toHaveText('Invalid username or password.');
   await page.getByLabel('Password', { exact: true }).fill('demo');
   await page.getByRole('button', { name: 'Sign in' }).click();
-  await expect(page.getByRole('heading', { name: 'Hello, Avery Lane.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'All Blogs' })).toBeVisible();
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('writespace_session')))).toEqual(records.session);
+  await page.getByRole('button', { name: /Avery Lane/ }).click();
+  await expect(page.getByText('Signed in as user', { exact: true })).toBeVisible();
   expect(browserErrors).toEqual([]);
 });
 
@@ -84,11 +90,14 @@ for (const path of ['/blogs', '/blog/example', '/write', '/edit/example', '/admi
 for (const role of ['user', 'admin']) {
   for (const path of ['/login', '/register', '/admin', '/users']) {
     test(`${role} session entry ${path} resolves role home`, async ({ page, seedStorage, browserErrors }) => {
-      await seedStorage({ writespace_session: { userId: role === 'admin' ? 'admin' : 'u1', username: role, displayName: 'Demo Reader', role } });
+      const session = { userId: role === 'admin' ? 'admin' : 'u1', username: role, displayName: 'Demo Reader', role };
+      await seedStorage({ writespace_session: session });
       await page.goto(path);
       await expect(page).toHaveURL(role === 'admin' ? /\/admin$/ : /\/blogs$/);
-      await expect(page.getByRole('heading', { name: 'Hello, Demo Reader.' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: role === 'admin' ? 'Hello, Demo Reader.' : 'All Blogs' })).toBeVisible();
+      expect(await page.evaluate(() => JSON.parse(localStorage.getItem('writespace_session')))).toEqual(session);
       await page.getByRole('button', { name: /Demo Reader/ }).click();
+      await expect(page.getByText(`Signed in as ${role}`, { exact: true })).toBeVisible();
       await page.getByRole('button', { name: 'Log out' }).click();
       await expect(page.getByRole('heading', { name: 'Your thoughts. Your space. Beautifully simple.' })).toBeVisible();
       await page.getByRole('link', { name: 'Start Reading', exact: true }).click();

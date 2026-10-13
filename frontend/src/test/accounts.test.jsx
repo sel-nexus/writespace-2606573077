@@ -99,14 +99,16 @@ it.each(['reserved', 'duplicate'])('focuses username for %s registration rejecti
   expect(screen.getByRole('alert')).toHaveTextContent(mode === 'reserved' ? 'The admin username is reserved.' : 'That username is already in use.');
   expect(getSession().value).toBeNull();
 });
-it('registers through App and renders real role and name at the user home', async () => {
+it('registers through App and renders blogs with the persisted user identity', async () => {
   window.history.replaceState({}, '', '/register'); render(
     <App />
   );
   const actor = userEvent.setup(); await fillSignup(actor);
   await actor.click(screen.getByRole('button', { name: 'Create account' }));
-  expect(screen.getByRole('heading', { name: 'Hello, Avery.' })).toBeInTheDocument();
-  expect(screen.getByText('Signed-in role').nextSibling).toHaveTextContent('user');
+  expect(screen.getByRole('heading', { name: 'All Blogs' })).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: /Avery/ })).toBeInTheDocument();
+  expect(screen.getByRole('img', { name: 'User avatar' })).toBeInTheDocument();
+  expect(getSession().value).toEqual({ userId: listUsers().value[0].id, username: 'avery', displayName: 'Avery', role: 'user' });
   expect(window.location.pathname).toBe('/blogs'); expect(getSession().value.role).toBe('user');
   expect(listUsers().value).toHaveLength(1);
 });
@@ -255,11 +257,14 @@ it.each(['/blogs', '/blog/example', '/write', '/edit/example', '/admin', '/users
   );
   expect(window.location.pathname).toBe('/login'); expect(screen.getByRole('heading', { name: 'Sign in' })).toBeInTheDocument();
 });
-it.each(['/login', '/register', '/admin', '/users', '/unknown', '/write', '/blog/example', '/edit/example'])('restores user session and redirects unavailable/forbidden destination %s', (path) => {
+it.each(['/login', '/register', '/admin', '/users', '/unknown', '/write', '/edit/example'])('restores user session and redirects unavailable/forbidden destination %s', (path) => {
   writeJson(SESSION_KEY, user); window.history.replaceState({}, '', path); render(
     <App />
   );
-  expect(window.location.pathname).toBe('/blogs'); expect(screen.getByRole('heading', { name: 'Hello, Avery.' })).toBeInTheDocument();
+  expect(window.location.pathname).toBe('/blogs');
+  expect(screen.getByRole('heading', { name: 'All Blogs' })).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: /Avery/ })).toBeInTheDocument();
+  expect(getSession().value).toEqual(user);
 });
 it.each(['/login', '/register', '/users'])('restores admin and redirects %s to role home', (path) => {
   writeJson(SESSION_KEY, admin); window.history.replaceState({}, '', path); render(

@@ -1,4 +1,4 @@
-/** Compose the accounts slice with one router and a persisted session snapshot. */
+/** Compose available features with one router and a persisted session snapshot. */
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
@@ -7,6 +7,8 @@ import { PublicNavbar } from './components/PublicNavbar.jsx';
 import { Footer } from './components/Footer.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
+import Blogs from './pages/Blogs.jsx';
+import BlogDetail from './pages/BlogDetail.jsx';
 import { GuestOnly, RequireAuth, RequireAdmin } from './components/RouteGuards.jsx';
 import { AuthenticatedNavbar } from './components/AuthenticatedNavbar.jsx';
 import { Alert } from './components/Alert.jsx';
@@ -44,7 +46,7 @@ AccountHome.propTypes = { session: sessionType.isRequired };
 function RouteNavbar({ session, onSessionChange }) {
   const { pathname } = useLocation();
   return session && pathname !== '/' ? (
-    <AuthenticatedNavbar session={session} onSessionChange={onSessionChange} availableFeatures={[]} />
+    <AuthenticatedNavbar session={session} onSessionChange={onSessionChange} availableFeatures={['reading']} />
   ) : (
     <PublicNavbar session={session} />
   );
@@ -58,11 +60,6 @@ export default function App() {
   const [warning, setWarning] = useState(bootstrap.ok ? '' : bootstrap.error.message);
   /** Update memory only after the calling action has succeeded. @param {import('./utils/validation.js').Session|null} value @returns {void} */
   function sessionChanged(value) { setSession(value); setWarning(''); }
-  const accountHome = (
-    <RequireAuth session={session}>
-      {session && <AccountHome session={session} />}
-    </RequireAuth>
-  );
   return (
     <BrowserRouter future={{ v7_relativeSplatPath: true }}>
       <div className="min-h-screen bg-background font-sans text-foreground">
@@ -86,7 +83,11 @@ export default function App() {
                 <Register onSessionChange={sessionChanged} />
               </GuestOnly>
             } />
-            <Route path="/blogs" element={accountHome} />
+            <Route path="/blogs" element={
+              <RequireAuth session={session}>
+                {session && <Blogs session={session} />}
+              </RequireAuth>
+            } />
             <Route path="/admin" element={
               <RequireAdmin session={session}>
                 {session && <AccountHome session={session} />}
@@ -99,7 +100,7 @@ export default function App() {
             } />
             <Route path="/blog/:id" element={
               <RequireAuth session={session}>
-                <Navigate to={roleHome(session)} replace />
+                <BlogDetail />
               </RequireAuth>
             } />
             <Route path="/write" element={
