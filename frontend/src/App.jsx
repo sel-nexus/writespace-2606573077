@@ -14,41 +14,17 @@ import EditBlog from './pages/EditBlog.jsx';
 import { GuestOnly, RequireAuth, RequireAdmin } from './components/RouteGuards.jsx';
 import { AuthenticatedNavbar } from './components/AuthenticatedNavbar.jsx';
 import { Alert } from './components/Alert.jsx';
-import { Avatar } from './components/Avatar.jsx';
-import { ui, sessionType } from './components/ui.js';
+import AdminDashboard from './pages/AdminDashboard.jsx';
+import Users from './pages/Users.jsx';
+import { sessionType } from './components/ui.js';
 import { getSession } from './utils/session.js';
 import { roleHome } from './utils/auth.js';
-
-/** Render a real account summary, not an unimplemented feature page. @param {object} props @returns {JSX.Element} */
-function AccountHome({ session }) {
-  return (
-    <section className="mx-auto max-w-3xl space-y-8 px-5 py-16">
-      <p className="text-xs font-bold uppercase tracking-[.2em] text-primary-700">Account home</p>
-      <h1 className="font-display text-hero tracking-tight">Hello, {session.displayName}.</h1>
-      <div className={`${ui.card} space-y-5`}>
-        <Avatar role={session.role} />
-        <h2 className="font-display text-2xl font-bold">Your browser-local account</h2>
-        <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-3 text-sm">
-          <dt className="text-foreground-muted">Username</dt>
-          <dd className="break-words font-semibold">{session.username}</dd>
-          <dt className="text-foreground-muted">Signed-in role</dt>
-          <dd className="font-semibold">{session.role}</dd>
-        </dl>
-        <p className="text-sm leading-relaxed text-foreground-muted">
-          This is a local demo. Your session stays in this browser.
-          Use the account menu above to log out.
-        </p>
-      </div>
-    </section>
-  );
-}
-AccountHome.propTypes = { session: sessionType.isRequired };
 
 /** Select navigation inside the single router; root remains public for signed-in roles. @param {object} props @returns {JSX.Element} */
 function RouteNavbar({ session, onSessionChange }) {
   const { pathname } = useLocation();
   return session && pathname !== '/' ? (
-    <AuthenticatedNavbar session={session} onSessionChange={onSessionChange} availableFeatures={['reading', 'writing']} />
+    <AuthenticatedNavbar session={session} onSessionChange={onSessionChange} availableFeatures={['reading', 'writing', 'admin']} />
   ) : (
     <PublicNavbar session={session} />
   );
@@ -92,12 +68,12 @@ export default function App() {
             } />
             <Route path="/admin" element={
               <RequireAdmin session={session}>
-                {session && <AccountHome session={session} />}
+                {session && <AdminDashboard session={session} />}
               </RequireAdmin>
             } />
             <Route path="/users" element={
               <RequireAdmin session={session}>
-                <Navigate to={roleHome(session)} replace />
+                {session && <Users session={session} />}
               </RequireAdmin>
             } />
             <Route path="/blog/:id" element={

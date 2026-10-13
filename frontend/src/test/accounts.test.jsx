@@ -162,7 +162,7 @@ it('signs in fixed admin through App then logs out to the public entry', async (
   expect(window.location.pathname).toBe('/login');
   await actor.type(screen.getByLabelText('Username'), 'ADMIN'); await actor.type(screen.getByLabelText('Password'), 'admin');
   await actor.click(screen.getByRole('button', { name: 'Sign in' }));
-  expect(screen.getByRole('heading', { name: 'Hello, Admin.' })).toBeInTheDocument(); expect(window.location.pathname).toBe('/admin');
+  expect(screen.getByRole('heading', { name: 'Admin Dashboard' })).toBeInTheDocument(); expect(window.location.pathname).toBe('/admin');
   await actor.click(screen.getByRole('button', { name: /Admin/ })); await actor.click(screen.getByRole('button', { name: 'Log out' }));
   expect(getSession().value).toBeNull(); expect(window.location.pathname).toBe('/');
   expect(screen.getByRole('heading', { name: 'Your thoughts. Your space. Beautifully simple.' })).toBeInTheDocument();
@@ -257,7 +257,7 @@ it.each(['/blogs', '/blog/example', '/write', '/edit/example', '/admin', '/users
   );
   expect(window.location.pathname).toBe('/login'); expect(screen.getByRole('heading', { name: 'Sign in' })).toBeInTheDocument();
 });
-it.each(['/login', '/register', '/admin', '/users', '/unknown', '/write', '/edit/example'])('restores user session and redirects unavailable/forbidden destination %s', (path) => {
+it.each(['/login', '/register', '/admin', '/users', '/unknown'])('restores user session and redirects unavailable/forbidden destination %s', (path) => {
   writeJson(SESSION_KEY, user); window.history.replaceState({}, '', path); render(
     <App />
   );
@@ -266,11 +266,13 @@ it.each(['/login', '/register', '/admin', '/users', '/unknown', '/write', '/edit
   expect(screen.getByRole('button', { name: /Avery/ })).toBeInTheDocument();
   expect(getSession().value).toEqual(user);
 });
-it.each(['/login', '/register', '/users'])('restores admin and redirects %s to role home', (path) => {
+it.each(['/login', '/register'])('restores admin and redirects %s to role home', (path) => {
   writeJson(SESSION_KEY, admin); window.history.replaceState({}, '', path); render(
     <App />
   );
-  expect(window.location.pathname).toBe('/admin'); expect(screen.getByText('Signed-in role').nextSibling).toHaveTextContent('admin');
+  expect(window.location.pathname).toBe('/admin');
+  expect(screen.getByRole('heading', { name: 'Admin Dashboard' })).toBeInTheDocument();
+  expect(screen.getByRole('link', { name: 'Manage Users' })).toHaveAttribute('href', '/users');
 });
 it('keeps root public for both roles and restores session after remount', () => {
   for (const session of [user, admin]) {

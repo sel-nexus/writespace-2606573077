@@ -68,12 +68,12 @@ for (const path of ['/blogs', '/blog/example', '/write', '/edit/example', '/admi
     await page.getByLabel('Password', { exact: true }).fill('admin');
     await page.getByRole('button', { name: 'Sign in' }).click();
     await expect(page).toHaveURL(/\/admin$/);
-    await expect(page.getByRole('heading', { name: 'Hello, Admin.' })).toBeVisible();
-    await expect(page.getByText('admin', { exact: true }).last()).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Admin Dashboard' })).toBeVisible();
+    await expect(page.getByText('Total Admins', { exact: true })).toBeVisible();
     await page.reload();
-    await expect(page.getByRole('heading', { name: 'Hello, Admin.' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Admin Dashboard' })).toBeVisible();
     if (isMobile) await page.getByRole('button', { name: 'Open menu' }).click();
-    await page.getByRole('link', { name: 'Account home' }).click();
+    await page.getByRole('navigation', { name: 'Account navigation' }).getByRole('link', { name: 'Dashboard', exact: true }).click();
     await page.getByRole('link', { name: /WriteSpace/ }).click();
     await expect(page).toHaveURL(/\/$/);
     await expect(page.getByRole('heading', { name: 'Your thoughts. Your space. Beautifully simple.' })).toBeVisible();
@@ -93,8 +93,8 @@ for (const role of ['user', 'admin']) {
       const session = { userId: role === 'admin' ? 'admin' : 'u1', username: role, displayName: 'Demo Reader', role };
       await seedStorage({ writespace_session: session });
       await page.goto(path);
-      await expect(page).toHaveURL(role === 'admin' ? /\/admin$/ : /\/blogs$/);
-      await expect(page.getByRole('heading', { name: role === 'admin' ? 'Hello, Demo Reader.' : 'All Blogs' })).toBeVisible();
+      await expect(page).toHaveURL(role === 'admin' ? (path === '/users' ? /\/users$/ : /\/admin$/) : /\/blogs$/);
+      await expect(page.getByRole('heading', { name: role === 'admin' ? (path === '/users' ? 'Manage Users' : 'Admin Dashboard') : 'All Blogs' })).toBeVisible();
       expect(await page.evaluate(() => JSON.parse(localStorage.getItem('writespace_session')))).toEqual(session);
       await page.getByRole('button', { name: /Demo Reader/ }).click();
       await expect(page.getByText(`Signed in as ${role}`, { exact: true })).toBeVisible();

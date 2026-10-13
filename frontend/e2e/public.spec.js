@@ -84,7 +84,7 @@ for (const role of ['user', 'admin']) {
     await expect(nav.getByRole('link', { name: 'Home', exact: true })).toHaveAttribute('aria-current', 'page');
     await nav.getByRole('link', { name: 'Dashboard', exact: true }).click();
     await expect(page).toHaveURL(role === 'admin' ? /\/admin$/ : /\/blogs$/);
-    await expect(page.getByRole('heading', { name: role === 'admin' ? 'Hello, Demo Reader.' : 'All Blogs' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: role === 'admin' ? 'Admin Dashboard' : 'All Blogs' })).toBeVisible();
     expect(await page.evaluate(() => JSON.parse(localStorage.getItem('writespace_session')))).toEqual(session);
     await page.getByRole('link', { name: /WriteSpace/ }).click();
     await page.getByRole('link', { name: 'Go to Dashboard' }).click();

@@ -5,7 +5,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Avatar } from './Avatar.jsx';
 import { Alert } from './Alert.jsx';
 import { ui, sessionType } from './ui.js';
-import { logout, roleHome } from '../utils/auth.js';
+import { logout } from '../utils/auth.js';
 const routeLinks = [
   { feature: 'reading', to: '/blogs', label: 'Blogs' },
   { feature: 'writing', to: '/write', label: 'Write' },
@@ -41,11 +41,6 @@ export function AuthenticatedNavbar({ session, onSessionChange, availableFeature
           {mobileOpen ? 'Close menu' : 'Open menu'}
         </button>
         <div id="account-navigation" className={`${mobileOpen ? 'flex' : 'hidden'} order-last w-full flex-col gap-3 sm:order-none sm:flex sm:w-auto sm:flex-row`}>
-          <NavLink to={roleHome(session)} onClick={closeMenus}
-            className={({ isActive }) => `${ui.focus} rounded-full px-4 py-3 ${isActive ? 'bg-surface-raised text-primary-800' : 'text-foreground-muted'}`}>
-
-            Account home
-          </NavLink>
           {links.map((link) => (
             <NavLink key={link.to} to={link.to} onClick={closeMenus}
               className={({ isActive }) => `${ui.focus} rounded-full px-4 py-3 ${isActive ? 'bg-surface-raised text-primary-800' : 'text-foreground-muted'}`}>
