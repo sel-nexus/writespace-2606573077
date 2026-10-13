@@ -5,7 +5,7 @@ import { listUsers, USERS_KEY } from '../utils/users.js';
 import { getSession, SESSION_KEY } from '../utils/session.js';
 import { writeJson, readJson } from '../utils/storage.js';
 const input = { displayName: 'Avery Lane', username: ' Avery ', password: ' demo ', confirmation: ' demo ' };
-const user = { id: 'u1', displayName: 'Avery Lane', username: 'avery', password: ' demo ', role: 'user', createdAt: '2026-01-01T00:00:00.000Z' };
+const user = { id: '11111111-1111-4111-8111-111111111111', displayName: 'Avery Lane', username: 'avery', password: ' demo ', role: 'user', createdAt: '2026-01-01T00:00:00.000Z' };
 const admin = { userId: 'admin', username: 'admin', displayName: 'Admin', role: 'admin' };
 /** Deny writes to one key while leaving the other browser operations real. @param {string} key @returns {void} */
 function denyWrite(key) {
@@ -17,11 +17,12 @@ function denyWrite(key) {
 }
 describe('public registration', () => {
   it('writes exact user and session records with native UUID/time and user-only role', () => {
-    vi.spyOn(globalThis.crypto, 'randomUUID').mockReturnValue('native-id');
+    const id = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
+    vi.spyOn(globalThis.crypto, 'randomUUID').mockReturnValue(id);
     const result = register({ ...input, role: 'admin', extra: true });
-    expect(result).toEqual({ ok: true, value: { userId: 'native-id', username: 'Avery', displayName: input.displayName, role: 'user' } });
+    expect(result).toEqual({ ok: true, value: { userId: id, username: 'Avery', displayName: input.displayName, role: 'user' } });
     const accounts = listUsers().value;
-    expect(accounts).toEqual([{ id: 'native-id', displayName: input.displayName, username: 'Avery', password: ' demo ', role: 'user', createdAt: expect.any(String) }]);
+    expect(accounts).toEqual([{ id, displayName: input.displayName, username: 'Avery', password: ' demo ', role: 'user', createdAt: expect.any(String) }]);
     expect(new Date(accounts[0].createdAt).toISOString()).toBe(accounts[0].createdAt);
     expect(getSession().value).toEqual(result.value);
   });
@@ -48,11 +49,21 @@ describe('public registration', () => {
     expect(register({ ...input, username: 'next' }).ok).toBe(true);
     expect(listUsers().value.map((value) => value.username)).toEqual(['avery', 'next']);
   });
-  it.each(['throw', 'missing', 'empty'])('contains UUID failure %s without incomplete records', (mode) => {
+  it.each(['throw', 'missing', 'empty', 'malformed'])('contains UUID failure %s without incomplete records', (mode) => {
     if (mode === 'missing') vi.stubGlobal('crypto', {});
-    else vi.spyOn(globalThis.crypto, 'randomUUID').mockImplementation(() => { if (mode === 'throw') throw new Error('no'); return ''; });
+    else vi.spyOn(globalThis.crypto, 'randomUUID').mockImplementation(() => { if (mode === 'throw') throw new Error('no'); return mode === 'malformed' ? 'native-id' : ''; });
     expect(register(input).error.code).toBe('ID_GENERATION_FAILED');
     expect(listUsers().value).toEqual([]); expect(getSession().value).toBeNull();
+  });
+  it.each(['native-id', 'admin', 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaZ', ' aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', null, 123])('rejects malformed generated signup ID %j preserving existing account/session bytes', (id) => {
+    const usersBytes = JSON.stringify([user], null, 2);
+    const sessionBytes = JSON.stringify(admin, null, 2);
+    localStorage.setItem(USERS_KEY, usersBytes);
+    localStorage.setItem(SESSION_KEY, sessionBytes);
+    vi.spyOn(globalThis.crypto, 'randomUUID').mockReturnValue(id);
+    expect(register({ ...input, username: 'new-writer' }).error.code).toBe('ID_GENERATION_FAILED');
+    expect(localStorage.getItem(USERS_KEY)).toBe(usersBytes);
+    expect(localStorage.getItem(SESSION_KEY)).toBe(sessionBytes);
   });
   it.each(['!', '{}', '[{"id":"bad"}]'])('refuses corrupt account storage %s and preserves bytes', (bytes) => {
     window.localStorage.setItem(USERS_KEY, bytes);
@@ -91,7 +102,7 @@ describe('login and logout', () => {
     expect(login({ username: 'avery', password: input.password }).error.code).toBe('INVALID_CREDENTIALS');
     writeJson(USERS_KEY, [user]);
     const result = login({ username: ' AVERY ', password: input.password });
-    expect(result.value).toEqual({ userId: 'u1', displayName: user.displayName, username: 'avery', role: 'user' });
+    expect(result.value).toEqual({ userId: user.id, displayName: user.displayName, username: 'avery', role: 'user' });
     expect(getSession().value).toEqual(result.value);
     writeJson(USERS_KEY, [{ ...user, role: 'admin' }]);
     expect(login({ username: 'avery', password: input.password }).value.role).toBe('admin');

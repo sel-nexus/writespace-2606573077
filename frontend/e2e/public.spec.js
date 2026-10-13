@@ -1,7 +1,7 @@
 /** Public journeys use real seeded storage and clicks after initial entry; run by the parent. */
 import { test, expect } from './fixtures.js';
 const tagline = 'Your thoughts. Your space. Beautifully simple.';
-const post = { id: 'p1', title: 'Browser notebook', content: 'A locally saved first line.\n' + 'x'.repeat(150), createdAt: '2026-01-02T00:00:00Z', authorId: 'u1', authorName: 'Avery Lane' };
+const post = { id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1', title: 'Browser notebook', content: 'A locally saved first line.\n' + 'x'.repeat(150), createdAt: '2026-01-02T00:00:00Z', authorId: '11111111-1111-4111-8111-111111111111', authorName: 'Avery Lane' };
 /** Save text-based preflight evidence and a screenshot for human review. @param {object} page @param {string} state @returns {Promise<void>} */
 async function capture(page, state) {
   const info = test.info();
@@ -49,11 +49,11 @@ test('empty landing, footer links, registration and login entry via clicks', asy
   expect(browserErrors).toEqual([]);
 });
 test('three newest previews persist on reload and guest selection enters login', async ({ page, seedStorage, browserErrors }) => {
-  await seedStorage({ writespace_posts: [1, 4, 2, 3].map((day) => ({ ...post, id: `p${day}`, title: `Notebook ${day}`, createdAt: `2026-01-0${day}T00:00:00Z` })) });
+  await seedStorage({ writespace_posts: [1, 4, 2, 3].map((day) => ({ ...post, id: `aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa${day}`, title: `Notebook ${day}`, createdAt: `2026-01-0${day}T00:00:00Z` })) });
   await page.goto('/');
   const recent = page.getByRole('region', { name: 'Recent writing' });
   await expect(recent.getByRole('heading', { level: 3 })).toHaveText(['Notebook 4', 'Notebook 3', 'Notebook 2']);
-  await expect(recent.getByText('Jan 04 2026')).toBeVisible();
+  await expect(recent.getByText('Jan 04, 2026')).toBeVisible();
   await expect(recent.getByText('Avery Lane')).toHaveCount(3);
   await expect(recent.getByText(post.content.slice(0, 120), { exact: true })).toHaveCount(3);
   await capture(page, 'populated');
@@ -67,7 +67,7 @@ test('three newest previews persist on reload and guest selection enters login',
 });
 for (const role of ['user', 'admin']) {
   test(`${role} root keeps public navigation and routes by role without losing session`, async ({ page, seedStorage, browserErrors, isMobile }) => {
-    const session = { userId: role === 'admin' ? 'admin' : 'u1', username: role, displayName: 'Demo Reader', role };
+    const session = { userId: role === 'admin' ? 'admin' : '11111111-1111-4111-8111-111111111111', username: role, displayName: 'Demo Reader', role };
     await seedStorage({ writespace_session: session, writespace_posts: [post] });
     await page.goto('/');
     await expect(page.getByRole('heading', { name: tagline })).toBeVisible();
@@ -90,7 +90,27 @@ for (const role of ['user', 'admin']) {
     await page.getByRole('link', { name: 'Go to Dashboard' }).click();
     await expect(page).toHaveURL(role === 'admin' ? /\/admin$/ : /\/blogs$/);
     await page.getByRole('link', { name: /WriteSpace/ }).click();
-    await expect(page.getByRole('link', { name: 'Read post: Browser notebook' })).toHaveAttribute('href', '/blog/p1');
+    const recent = page.getByRole('region', { name: 'Recent writing' });
+    const beforeSession = await page.evaluate(() => localStorage.getItem('writespace_session'));
+    await recent.getByRole('link', { name: `Read post: ${post.title}` }).click();
+    await expect(page).toHaveURL(new RegExp(`/blog/${post.id}$`));
+    const reader = page.getByRole('article', { name: post.title });
+    await expect(reader.getByRole('heading', { level: 1 })).toHaveText(post.title);
+    await expect(reader.getByText(`By ${post.authorName}`, { exact: true })).toBeVisible();
+    await expect(reader.locator('time')).toHaveText('Jan 02, 2026');
+    await expect(reader.locator('time')).toHaveAttribute('datetime', post.createdAt);
+    expect(await reader.locator('p.whitespace-pre-wrap').textContent()).toBe(post.content);
+    expect(await page.evaluate(() => localStorage.getItem('writespace_session'))).toBe(beforeSession);
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('writespace_session')))).toEqual(session);
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('writespace_posts')))).toEqual([post]);
+    await page.getByRole('link', { name: 'Back to All Blogs' }).click();
+    await expect(page).toHaveURL(/\/blogs$/);
+    await expect(page.getByRole('heading', { name: 'All Blogs' })).toBeVisible();
+    await page.getByRole('link', { name: /WriteSpace/ }).click();
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.getByRole('heading', { name: tagline })).toBeVisible();
+    await expect(recent.getByRole('link', { name: `Read post: ${post.title}` })).toBeVisible();
+    expect(await page.evaluate(() => localStorage.getItem('writespace_session'))).toBe(beforeSession);
     await page.getByRole('link', { name: 'Start Reading' }).click();
     await expect(page).toHaveURL(/\/blogs$/);
     expect(await page.evaluate(() => JSON.parse(localStorage.getItem('writespace_session')))).toEqual(session);

@@ -12,9 +12,9 @@ import { POSTS_KEY } from '../utils/posts.js';
 import { writeJson } from '../utils/storage.js';
 import { SESSION_KEY, getSession } from '../utils/session.js';
 const tagline = 'Your thoughts. Your space. Beautifully simple.';
-const user = { userId: 'u1', displayName: 'Avery', username: 'avery', role: 'user' };
+const user = { userId: '11111111-1111-4111-8111-111111111111', displayName: 'Avery', username: 'avery', role: 'user' };
 const admin = { userId: 'admin', displayName: 'Admin', username: 'admin', role: 'admin' };
-const post = { id: 'p1', title: 'Local note', content: 'First line\nSecond line', createdAt: '2026-01-02T00:00:00Z', authorId: 'u1', authorName: 'Avery' };
+const post = { id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1', title: 'Local note', content: 'First line\nSecond line', createdAt: '2026-01-02T00:00:00Z', authorId: '11111111-1111-4111-8111-111111111111', authorName: 'Avery' };
 /** Expose router destination for interaction assertions. @returns {JSX.Element} */
 function Location() {
   const { pathname } = useLocation();
@@ -43,12 +43,12 @@ it('renders exact landing content, empty copy and honest demo disclosure', () =>
   expect(screen.getByRole('complementary')).toHaveTextContent('Do not use real credentials');
 });
 it('shows only three newest local previews with metadata and guest gate', async () => {
-  writeJson(POSTS_KEY, [1, 4, 2, 3].map((day) => ({ ...post, id: `p${day}`, title: `Note ${day}`, createdAt: `2026-01-0${day}T00:00:00Z` })));
+  writeJson(POSTS_KEY, [1, 4, 2, 3].map((day) => ({ ...post, id: `aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa${day}`, title: `Note ${day}`, createdAt: `2026-01-0${day}T00:00:00Z` })));
   render(<App />);
   const recent = screen.getByRole('region', { name: 'Recent writing' });
   expect(within(recent).getAllByRole('heading', { level: 3 }).map((heading) => heading.textContent)).toEqual(['Note 4', 'Note 3', 'Note 2']);
   expect(within(recent).getAllByRole('article')).toHaveLength(3);
-  expect(within(recent).getByText('Jan 04 2026')).toBeInTheDocument();
+  expect(within(recent).getByText('Jan 04, 2026')).toBeInTheDocument();
   expect(within(recent).getAllByText('Avery')).toHaveLength(3);
   await userEvent.setup().click(screen.getByRole('link', { name: 'Read post: Note 4' }));
   expect(window.location.pathname).toBe('/login');
@@ -126,25 +126,28 @@ it.each([null, user, admin])('PostCard safely renders text and role destination 
   expect(screen.getByText((_, element) => element.tagName === 'P' && element.textContent === content.slice(0, 120))).toBeInTheDocument();
   expect(document.querySelector('img')).toBeNull();
   expect(screen.getByRole('img', { name: 'User avatar' })).toBeInTheDocument();
-  expect(screen.getByText('Jan 02 2026')).toHaveAttribute('datetime', post.createdAt);
+  expect(screen.getByText('Jan 02, 2026')).toHaveAttribute('datetime', post.createdAt);
   await userEvent.setup().click(screen.getByRole('link', { name: 'Read post: Local note' }));
-  expect(screen.getByText(`Location: ${session ? '/blog/p1' : '/login'}`)).toBeInTheDocument();
+  expect(screen.getByText(`Location: ${session ? '/blog/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1' : '/login'}`)).toBeInTheDocument();
   expect(screen.queryByRole('link', { name: /Edit/ })).not.toBeInTheDocument();
 });
-it('cycles accents and distinguishes fixed-admin author without reading users', () => {
+it.each(['user', 'admin'])('cycles four positional post-avatar colors with wraparound independently of %s role', (role) => {
   inRouter(
     <>
-      {[0, 1, 2, 3].map((index) => (
-        <PostCard key={index} post={{ ...post, authorId: 'admin' }} index={index} />
+      {[0, 1, 2, 3, 4].map((index) => (
+        <PostCard key={index} post={{ ...post, authorId: role === 'admin' ? 'admin' : post.authorId }} index={index} />
       ))}
     </>
   );
   const cards = screen.getAllByRole('article');
-  expect(cards[0]).toHaveClass('border-t-primary-500');
-  expect(cards[1]).toHaveClass('border-t-pink-500');
-  expect(cards[2]).toHaveClass('border-t-teal-500');
-  expect(cards[3]).toHaveClass('border-t-primary-500');
-  expect(screen.getAllByRole('img', { name: 'Administrator avatar' })).toHaveLength(4);
+  const colors = ['indigo', 'violet', 'pink', 'teal', 'indigo'];
+  cards.forEach((card, index) => {
+    expect(card).toHaveClass(`border-t-${colors[index]}-500`);
+    const avatar = within(card).getByRole('img', { name: role === 'admin' ? 'Administrator avatar' : 'User avatar' });
+    expect(avatar).toHaveClass(`bg-${colors[index]}-100`, `text-${colors[index]}-800`);
+    expect(avatar).toHaveTextContent(role === 'admin' ? '👑' : '📚');
+    expect(card.querySelector('time').textContent).toBe('Jan 02, 2026');
+  });
 });
 it('footer contains only exact source links/year with keyboard focus styling and navigation', async () => {
   inRouter(<Footer />);

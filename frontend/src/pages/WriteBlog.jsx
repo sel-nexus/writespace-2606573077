@@ -7,7 +7,10 @@ import { createPost } from '../utils/posts.js';
 /** Navigate to the reader only after persistence succeeds. @param {object} props @returns {JSX.Element} */
 export default function WriteBlog({ session }) {
   const navigate = useNavigate();
-  /** Save entered text unchanged and return failures to the form. @param {object} input @returns {import('../utils/validation.js').Result<import('../utils/posts.js').Post>} */
+  /** Save entered text unchanged and return failures to the form.
+   * @param {object} input
+   * @returns {import('../utils/validation.js').Result<import('../utils/posts.js').Post>}
+   */
   function save(input) {
     const result = createPost(input, session);
     if (result.ok) navigate(`/blog/${encodeURIComponent(result.value.id)}`);

@@ -12,7 +12,7 @@ import { login } from '../utils/auth.js';
 import { getSession, SESSION_KEY } from '../utils/session.js';
 import { listUsers, USERS_KEY } from '../utils/users.js';
 import { writeJson } from '../utils/storage.js';
-const user = { userId: 'u1', username: 'avery', displayName: 'Avery', role: 'user' };
+const user = { userId: '11111111-1111-4111-8111-111111111111', username: 'avery', displayName: 'Avery', role: 'user' };
 const admin = { userId: 'admin', username: 'admin', displayName: 'Admin', role: 'admin' };
 const future = { v7_startTransition: true, v7_relativeSplatPath: true };
 /** Show the current destination for redirect assertions. @returns {JSX.Element} */
@@ -36,10 +36,10 @@ async function fillSignup(actor, overrides = {}) {
   const values = { 'Display name': 'Avery', Username: 'avery', Password: 'demo', 'Confirm password': 'demo', ...overrides };
   for (const [label, value] of Object.entries(values)) if (value) await actor.type(screen.getByLabelText(label), value);
 }
-const paths = ['/', '/login', '/register', '/blogs', '/blog/p1', '/write', '/edit/p1', '/admin', '/users', '/unknown'];
+const paths = ['/', '/login', '/register', '/blogs', '/blog/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1', '/write', '/edit/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1', '/admin', '/users', '/unknown'];
 it.each(paths)('evaluates guest/user/admin access matrix for %s', (path) => {
   const guest = ['/', '/login', '/register'].includes(path);
-  const normal = ['/', '/blogs', '/blog/p1', '/write', '/edit/p1'].includes(path);
+  const normal = ['/', '/blogs', '/blog/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1', '/write', '/edit/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1'].includes(path);
   const elevated = normal || ['/admin', '/users'].includes(path);
   expect(canAccessRoute(path, null)).toBe(guest);
   expect(canAccessRoute(path, user)).toBe(normal);
@@ -89,7 +89,7 @@ it('shows mismatch on confirmation and retains other entered values', async () =
   expect(screen.getByLabelText('Display name')).toHaveValue('Avery'); expect(listUsers().value).toEqual([]);
 });
 it.each(['reserved', 'duplicate'])('focuses username for %s registration rejection', async (mode) => {
-  if (mode === 'duplicate') writeJson(USERS_KEY, [{ id: 'u1', displayName: 'Avery', username: 'AVERY', password: 'demo', role: 'user', createdAt: '2026-01-01T00:00:00Z' }]);
+  if (mode === 'duplicate') writeJson(USERS_KEY, [{ id: user.userId, displayName: 'Avery', username: 'AVERY', password: 'demo', role: 'user', createdAt: '2026-01-01T00:00:00Z' }]);
   inRouter(
     <Register onSessionChange={vi.fn()} />
   );
@@ -185,7 +185,7 @@ it.each(['corrupt', 'unavailable'])('shows login account-read %s failure without
   expect(getSession().value).toBeNull();
 });
 it('signs a stored user in through the real form and routes by role', async () => {
-  writeJson(USERS_KEY, [{ id: 'u1', username: 'avery', displayName: 'Avery', password: 'demo', role: 'user', createdAt: '2026-01-01T00:00:00Z' }]);
+  writeJson(USERS_KEY, [{ id: user.userId, username: 'avery', displayName: 'Avery', password: 'demo', role: 'user', createdAt: '2026-01-01T00:00:00Z' }]);
   const changed = vi.fn();
   inRouter(
     <Login onSessionChange={changed} />

@@ -40,7 +40,10 @@ export function AuthenticatedNavbar({ session, onSessionChange, availableFeature
           className={`min-h-11 rounded-control px-3 sm:hidden ${ui.focus}`}>
           {mobileOpen ? 'Close menu' : 'Open menu'}
         </button>
-        <div id="account-navigation" className={`${mobileOpen ? 'flex' : 'hidden'} order-last w-full flex-col gap-3 sm:order-none sm:flex sm:w-auto sm:flex-row`}>
+        <div
+          id="account-navigation"
+          className={`${mobileOpen ? 'flex' : 'hidden'} order-last w-full flex-col gap-3 sm:order-none sm:flex sm:w-auto sm:flex-row`}
+        >
           {links.map((link) => (
             <NavLink key={link.to} to={link.to} onClick={closeMenus}
               className={({ isActive }) => `${ui.focus} rounded-full px-4 py-3 ${isActive ? 'bg-surface-raised text-primary-800' : 'text-foreground-muted'}`}>
@@ -57,7 +60,7 @@ export function AuthenticatedNavbar({ session, onSessionChange, availableFeature
           </button>
           {accountOpen && (
             <div id="account-actions" onKeyDown={(event) => { if (event.key === 'Escape') setAccountOpen(false); }}
-              className="absolute right-0 z-10 mt-3 w-64 space-y-3 rounded-card border border-border bg-surface p-4 shadow-focal">
+              className="absolute left-0 z-10 mt-3 w-64 space-y-3 rounded-card border border-border bg-surface p-4 shadow-focal sm:left-auto sm:right-0">
               <p className="text-sm text-foreground-muted">Signed in as {session.role}</p>
               <button type="button" onClick={handleLogout} className={ui.button}>
                 Log out

@@ -6,10 +6,10 @@ import App from '../App.jsx';
 import { POSTS_KEY, getPost, listPosts } from '../utils/posts.js';
 import { SESSION_KEY } from '../utils/session.js';
 import { writeJson } from '../utils/storage.js';
-const owner = { userId: 'u1', username: 'avery', displayName: 'Avery', role: 'user' };
+const owner = { userId: '11111111-1111-4111-8111-111111111111', username: 'avery', displayName: 'Avery', role: 'user' };
 const admin = { userId: 'admin', username: 'admin', displayName: 'Admin', role: 'admin' };
-const stranger = { ...owner, userId: 'other' };
-const post = { id: 'p1', title: 'Original note', content: 'Original\ncontent', createdAt: '2026-01-02T00:00:00Z', authorId: 'u1', authorName: 'Avery' };
+const stranger = { ...owner, userId: '55555555-5555-4555-8555-555555555555' };
+const post = { id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1', title: 'Original note', content: 'Original\ncontent', createdAt: '2026-01-02T00:00:00Z', authorId: owner.userId, authorName: 'Avery' };
 /** Mount the production router with an initial session fixture. @param {string} path @param {object|null} session @returns {object} */
 function open(path = '/write', session = owner) {
   if (session) writeJson(SESSION_KEY, session);
@@ -21,7 +21,7 @@ function fill(title = '  Written title  ', content = '\n Written content\n ') {
   fireEvent.change(screen.getByRole('textbox', { name: 'Title' }), { target: { value: title } });
   fireEvent.change(screen.getByRole('textbox', { name: 'Content' }), { target: { value: content } });
 }
-it.each(['/write', '/edit/p1'])('requires both fields with aria errors and first-invalid focus on %s', async (path) => {
+it.each(['/write', `/edit/${post.id}`])('requires both fields with aria errors and first-invalid focus on %s', async (path) => {
   writeJson(POSTS_KEY, [post]);
   open(path);
   fill('  ', '\n ');
@@ -75,27 +75,27 @@ it.each([owner, admin])('prefills and edits while preserving all original metada
   expect(screen.getByText(`${post.content.length} characters`)).toBeInTheDocument();
   fill();
   await userEvent.setup().click(screen.getByRole('button', { name: 'Save Changes' }));
-  expect(window.location.pathname).toBe('/blog/p1');
-  expect(getPost('p1').value).toEqual({ ...post, title: '  Written title  ', content: '\n Written content\n ' });
+  expect(window.location.pathname).toBe(`/blog/${post.id}`);
+  expect(getPost(post.id).value).toEqual({ ...post, title: '  Written title  ', content: '\n Written content\n ' });
 });
-it.each(['/write', '/edit/p1'])('cancel discards unsaved text with no write on %s', async (path) => {
+it.each(['/write', `/edit/${post.id}`])('cancel discards unsaved text with no write on %s', async (path) => {
   writeJson(POSTS_KEY, [post]);
   open(path);
   const raw = localStorage.getItem(POSTS_KEY);
   const write = vi.spyOn(Storage.prototype, 'setItem');
   fill();
   await userEvent.setup().click(screen.getByRole('link', { name: 'Cancel' }));
-  expect(window.location.pathname).toBe(path === '/write' ? '/blogs' : '/blog/p1');
+  expect(window.location.pathname).toBe(path === '/write' ? '/blogs' : `/blog/${post.id}`);
   expect(localStorage.getItem(POSTS_KEY)).toBe(raw);
   expect(write).not.toHaveBeenCalled();
 });
-for (const path of ['/write', '/edit/p1']) {
+for (const path of ['/write', `/edit/${post.id}`]) {
   it.each(['quota', 'corrupt', 'denied', ...(path === '/write' ? ['uuid'] : ['owner-changed', 'removed'])])(`keeps form and storage unchanged on ${path} failure %s`, async (mode) => {
     writeJson(POSTS_KEY, [post]);
     open(path);
     fill();
     if (mode === 'corrupt') localStorage.setItem(POSTS_KEY, '!');
-    if (mode === 'owner-changed') writeJson(POSTS_KEY, [{ ...post, authorId: 'other' }]);
+    if (mode === 'owner-changed') writeJson(POSTS_KEY, [{ ...post, authorId: stranger.userId }]);
     if (mode === 'removed') writeJson(POSTS_KEY, []);
     const raw = localStorage.getItem(POSTS_KEY);
     if (mode === 'quota') vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('quota'); });
@@ -120,7 +120,7 @@ for (const path of ['/write', '/edit/p1']) {
 it('redirects non-owner initial edit and hides all mutation entry points', async () => {
   writeJson(POSTS_KEY, [post]);
   const raw = localStorage.getItem(POSTS_KEY);
-  open('/edit/p1', stranger);
+  open(`/edit/${post.id}`, stranger);
   expect(window.location.pathname).toBe('/blogs');
   expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   expect(screen.queryByRole('link', { name: `Edit post: ${post.title}` })).not.toBeInTheDocument();
@@ -130,11 +130,11 @@ it('redirects non-owner initial edit and hides all mutation entry points', async
   expect(localStorage.getItem(POSTS_KEY)).toBe(raw);
 });
 it('refreshes prefill and authorization when only the edit URL ID changes', () => {
-  writeJson(POSTS_KEY, [post, { ...post, id: 'p2', title: 'Second note', content: 'Second content' }, { ...post, id: 'foreign', authorId: 'other' }]);
-  open('/edit/p1');
+  writeJson(POSTS_KEY, [post, { ...post, id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa2', title: 'Second note', content: 'Second content' }, { ...post, id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbb5', authorId: stranger.userId }]);
+  open(`/edit/${post.id}`);
   fill('Unsaved first note', 'Unsaved content');
   act(() => {
-    window.history.pushState({}, '', '/edit/p2');
+    window.history.pushState({}, '', '/edit/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa2');
     window.dispatchEvent(new PopStateEvent('popstate'));
   });
   expect(screen.getByRole('textbox', { name: 'Title' })).toHaveValue('Second note');
@@ -145,12 +145,12 @@ it('refreshes prefill and authorization when only the edit URL ID changes', () =
   });
   expect(screen.getByRole('heading', { name: 'Post not found' })).toBeInTheDocument();
   act(() => {
-    window.history.pushState({}, '', '/edit/foreign');
+    window.history.pushState({}, '', '/edit/bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbb5');
     window.dispatchEvent(new PopStateEvent('popstate'));
   });
   expect(window.location.pathname).toBe('/blogs');
-  expect(getPost('p1').value).toEqual(post);
-  expect(getPost('p2').value.title).toBe('Second note');
+  expect(getPost(post.id).value).toEqual(post);
+  expect(getPost('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa2').value.title).toBe('Second note');
 });
 it.each(['missing', 'corrupt', 'denied'])('renders edit %s safely with working back navigation', async (mode) => {
   if (mode === 'corrupt') localStorage.setItem(POSTS_KEY, '!');
@@ -168,24 +168,24 @@ it.each(['missing', 'corrupt', 'denied'])('renders edit %s safely with working b
   await userEvent.setup().click(screen.getByRole('link', { name: 'Back to All Blogs' }));
   expect(window.location.pathname).toBe('/blogs');
 });
-it.each(['/write', '/edit/p1'])('guards guest writing route %s', (path) => {
+it.each(['/write', `/edit/${post.id}`])('guards guest writing route %s', (path) => {
   writeJson(POSTS_KEY, [post]);
   open(path, null);
   expect(window.location.pathname).toBe('/login');
   expect(screen.queryByRole('textbox', { name: 'Content' })).not.toBeInTheDocument();
-  expect(getPost('p1').value).toEqual(post);
+  expect(getPost(post.id).value).toEqual(post);
 });
 it.each([owner, admin])('reader edit is reachable and delete cancellation then success works for %j', async (session) => {
   writeJson(POSTS_KEY, [post]);
-  open('/blog/p1', session);
+  open(`/blog/${post.id}`, session);
   const actor = userEvent.setup();
   await actor.click(screen.getByRole('link', { name: 'Edit', exact: true }));
-  expect(window.location.pathname).toBe('/edit/p1');
+  expect(window.location.pathname).toBe(`/edit/${post.id}`);
   await actor.click(screen.getByRole('link', { name: 'Cancel' }));
   const raw = localStorage.getItem(POSTS_KEY);
   const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false);
   await actor.click(screen.getByRole('button', { name: 'Delete' }));
-  expect(window.location.pathname).toBe('/blog/p1');
+  expect(window.location.pathname).toBe(`/blog/${post.id}`);
   expect(localStorage.getItem(POSTS_KEY)).toBe(raw);
   expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   confirm.mockReturnValue(true);
@@ -196,16 +196,16 @@ it.each([owner, admin])('reader edit is reachable and delete cancellation then s
 });
 it.each(['quota', 'corrupt', 'denied', 'owner-changed', 'removed'])('delete failure %s stays visible on reader without false success', async (mode) => {
   writeJson(POSTS_KEY, [post]);
-  open('/blog/p1');
+  open(`/blog/${post.id}`);
   const confirm = vi.spyOn(window, 'confirm').mockReturnValue(true);
   if (mode === 'corrupt') localStorage.setItem(POSTS_KEY, '!');
-  if (mode === 'owner-changed') writeJson(POSTS_KEY, [{ ...post, authorId: 'other' }]);
+  if (mode === 'owner-changed') writeJson(POSTS_KEY, [{ ...post, authorId: stranger.userId }]);
   if (mode === 'removed') writeJson(POSTS_KEY, []);
   const raw = localStorage.getItem(POSTS_KEY);
   if (mode === 'quota') vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('quota'); });
   if (mode === 'denied') vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => { throw new Error('denied'); });
   await userEvent.setup().click(screen.getByRole('button', { name: 'Delete' }));
-  expect(window.location.pathname).toBe('/blog/p1');
+  expect(window.location.pathname).toBe(`/blog/${post.id}`);
   expect(screen.getByRole('alert')).toHaveTextContent('Not deleted.');
   expect(screen.getByRole('article', { name: post.title })).toBeInTheDocument();
   if (mode !== 'quota') expect(confirm).not.toHaveBeenCalled();

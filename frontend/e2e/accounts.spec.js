@@ -90,7 +90,7 @@ for (const path of ['/blogs', '/blog/example', '/write', '/edit/example', '/admi
 for (const role of ['user', 'admin']) {
   for (const path of ['/login', '/register', '/admin', '/users']) {
     test(`${role} session entry ${path} resolves role home`, async ({ page, seedStorage, browserErrors }) => {
-      const session = { userId: role === 'admin' ? 'admin' : 'u1', username: role, displayName: 'Demo Reader', role };
+      const session = { userId: role === 'admin' ? 'admin' : '11111111-1111-4111-8111-111111111111', username: role, displayName: 'Demo Reader', role };
       await seedStorage({ writespace_session: session });
       await page.goto(path);
       await expect(page).toHaveURL(role === 'admin' ? (path === '/users' ? /\/users$/ : /\/admin$/) : /\/blogs$/);

@@ -15,7 +15,10 @@ export default function EditBlog({ session }) {
   // Never authorize or prefill a new URL using the preceding target's record.
   const result = snapshot.id === id ? snapshot.result : getPost(id);
   const post = result.ok ? result.value : null;
-  /** Reread ownership in the domain helper before saving. @param {object} input @returns {import('../utils/validation.js').Result<import('../utils/posts.js').Post>} */
+  /** Reread ownership in the domain helper before saving.
+   * @param {object} input
+   * @returns {import('../utils/validation.js').Result<import('../utils/posts.js').Post>}
+   */
   function save(input) {
     const saved = updatePost(id, input, session);
     if (saved.ok) navigate(`/blog/${encodeURIComponent(saved.value.id)}`);

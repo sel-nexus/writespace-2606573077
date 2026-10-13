@@ -11,9 +11,9 @@ import { listPosts, POSTS_KEY } from '../utils/posts.js';
 import { getSession, SESSION_KEY } from '../utils/session.js';
 import { writeJson } from '../utils/storage.js';
 const admin = { userId: 'admin', username: 'admin', displayName: 'Admin', role: 'admin' };
-const user = { userId: 'u1', username: 'avery', displayName: 'Avery', role: 'user' };
-const record = { id: 'u1', username: 'avery', displayName: 'Avery', password: 'demo', role: 'user', createdAt: '2026-01-01T00:00:00Z' };
-const post = { id: 'p1', title: 'Note 1', content: 'Text', authorId: 'u1', authorName: 'Avery', createdAt: '2026-01-01T00:00:00Z' };
+const user = { userId: '11111111-1111-4111-8111-111111111111', username: 'avery', displayName: 'Avery', role: 'user' };
+const record = { id: user.userId, username: 'avery', displayName: 'Avery', password: 'demo', role: 'user', createdAt: '2026-01-01T00:00:00Z' };
+const post = { id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1', title: 'Note 1', content: 'Text', authorId: user.userId, authorName: 'Avery', createdAt: '2026-01-01T00:00:00Z' };
 /** Render a community screen in a test-only router. @param {JSX.Element} element @returns {object} */
 function show(element) {
   return render(
@@ -34,8 +34,8 @@ async function fill(actor, overrides = {}) {
 /** Read exact-label stat values. @param {string} label @returns {HTMLElement} */
 function stat(label) { return screen.getByText(label, { exact: true }).nextSibling; }
 it('shows four sourced counts, violet/indigo banner, five newest posts, and quick actions', () => {
-  writeJson(USERS_KEY, [record, { ...record, id: 'a2', username: 'a2', role: 'admin' }]);
-  const posts = [1, 6, 3, 2, 5, 4].map((day) => ({ ...post, id: `p${day}`, title: `Note ${day}`, createdAt: `2026-01-0${day}T00:00:00Z` }));
+  writeJson(USERS_KEY, [record, { ...record, id: '33333333-3333-4333-8333-333333333333', username: 'a2', role: 'admin' }]);
+  const posts = [1, 6, 3, 2, 5, 4].map((day) => ({ ...post, id: `aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa${day}`, title: `Note ${day}`, createdAt: `2026-01-0${day}T00:00:00Z` }));
   writeJson(POSTS_KEY, posts); show(<AdminDashboard session={admin} />);
   expect(stat('Total Posts')).toHaveTextContent('6'); expect(stat('Total Users')).toHaveTextContent('3');
   expect(stat('Total Admins')).toHaveTextContent('2'); expect(stat('Total users')).toHaveTextContent('1');
@@ -46,7 +46,7 @@ it('shows four sourced counts, violet/indigo banner, five newest posts, and quic
   const latest = screen.getByRole('region', { name: 'Latest Posts' });
   expect(within(latest).getAllByRole('heading', { level: 3 }).map((node) => node.textContent)).toEqual(['Note 6', 'Note 5', 'Note 4', 'Note 3', 'Note 2']);
   expect(screen.queryByRole('link', { name: 'Note 1' })).not.toBeInTheDocument();
-  expect(screen.getByRole('link', { name: 'Edit post: Note 6' })).toHaveAttribute('href', '/edit/p6');
+  expect(screen.getByRole('link', { name: 'Edit post: Note 6' })).toHaveAttribute('href', '/edit/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa6');
   expect(listPosts().value).toHaveLength(6);
 });
 it.each(['success', 'cancel', 'write', 'corrupt', 'absent', 'read'])('dashboard post deletion handles %s without false success', async (mode) => {
@@ -82,7 +82,7 @@ it('shows fixed logical admin and complete account metadata in desktop table/mob
   expect(within(table).getAllByRole('columnheader').map((node) => node.textContent)).toEqual(['Account', 'Username', 'Role', 'Created date', 'Action']);
   const card = screen.getByRole('article', { name: 'Account: avery' });
   expect(within(card).getByRole('img', { name: 'User avatar' })).toBeInTheDocument();
-  expect(card).toHaveTextContent('Avery'); expect(card).toHaveTextContent('avery'); expect(card).toHaveTextContent('user'); expect(card).toHaveTextContent('Jan 01 2026');
+  expect(card).toHaveTextContent('Avery'); expect(card).toHaveTextContent('avery'); expect(card).toHaveTextContent('user'); expect(card).toHaveTextContent('Jan 01, 2026');
   expect(screen.getAllByRole('button', { name: 'Delete account: admin' })).toHaveLength(2);
   for (const control of screen.getAllByRole('button', { name: 'Delete account: admin' })) {
     expect(control).toBeDisabled(); expect(control).toHaveAttribute('title', 'Default admin cannot be deleted');
@@ -159,7 +159,7 @@ it.each(['corrupt', 'read'])('users page displays a warning for %s data and does
 });
 const routes = [
   ['/', 'Your thoughts. Your space. Beautifully simple.'], ['/login', 'Welcome back.'], ['/register', 'Start your next chapter.'],
-  ['/blogs', 'All Blogs'], ['/blog/p1', 'Note 1'], ['/write', 'Write a Blog'], ['/edit/p1', 'Edit Blog'], ['/admin', 'Admin Dashboard'], ['/users', 'Manage Users']
+  ['/blogs', 'All Blogs'], [`/blog/${post.id}`, 'Note 1'], ['/write', 'Write a Blog'], [`/edit/${post.id}`, 'Edit Blog'], ['/admin', 'Admin Dashboard'], ['/users', 'Manage Users']
 ];
 it.each(routes)('App renders actual final route %s for permitted role', (path, heading) => {
   writeJson(POSTS_KEY, [post]); if (!['/', '/login', '/register'].includes(path)) writeJson(SESSION_KEY, admin);
@@ -186,12 +186,12 @@ it('App dashboard quicklinks navigate to real writing/users and admin navigation
 it('App dashboard edit link saves a cross-author post and preserves attribution', async () => {
   writeJson(POSTS_KEY, [post]); writeJson(SESSION_KEY, admin); window.history.replaceState({}, '', '/admin'); render(<App />);
   const actor = userEvent.setup(); await actor.click(screen.getByRole('link', { name: 'Edit post: Note 1' }));
-  expect(window.location.pathname).toBe('/edit/p1'); expect(screen.getByLabelText('Content')).toHaveValue('Text');
+  expect(window.location.pathname).toBe(`/edit/${post.id}`); expect(screen.getByLabelText('Content')).toHaveValue('Text');
   await actor.clear(screen.getByLabelText('Title')); await actor.type(screen.getByLabelText('Title'), 'Revised');
-  await actor.click(screen.getByRole('button', { name: 'Save Changes' })); expect(window.location.pathname).toBe('/blog/p1');
+  await actor.click(screen.getByRole('button', { name: 'Save Changes' })); expect(window.location.pathname).toBe(`/blog/${post.id}`);
   expect(listPosts().value).toEqual([{ ...post, title: 'Revised' }]);
 });
-it.each(['/write', '/edit/p1', '/blog/p1'])('regular user can use actual permitted route %s', (path) => {
+it.each(['/write', `/edit/${post.id}`, `/blog/${post.id}`])('regular user can use actual permitted route %s', (path) => {
   writeJson(POSTS_KEY, [post]); writeJson(SESSION_KEY, user); window.history.replaceState({}, '', path); render(<App />);
   expect(window.location.pathname).toBe(path); expect(screen.queryByRole('link', { name: 'Users', exact: true })).not.toBeInTheDocument();
 });

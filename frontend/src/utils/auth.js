@@ -2,7 +2,7 @@
 import { listUsers, USERS_KEY } from './users.js';
 import { writeJson } from './storage.js';
 import { setSession, clearSession } from './session.js';
-import { failure, success, normalizeUsername, requiredErrors } from './validation.js';
+import { failure, success, isUuid, normalizeUsername, requiredErrors } from './validation.js';
 export const REGISTER_LABELS = { displayName: 'Display name', username: 'Username', password: 'Password', confirmation: 'Confirm password' };
 export const LOGIN_LABELS = { username: 'Username', password: 'Password' };
 /** Extract a password-free identity. @param {import('./validation.js').User} user @returns {import('./validation.js').Session} */
@@ -21,7 +21,7 @@ export function register(input) {
   let id;
   try {
     id = globalThis.crypto.randomUUID();
-    if (typeof id !== 'string' || !id.trim()) throw new Error('Missing identifier');
+    if (!isUuid(id)) throw new Error('Invalid identifier');
   } catch { return failure('ID_GENERATION_FAILED', 'This browser could not create an account ID. Please retry in a supported browser.'); }
   const user = { id, displayName: input.displayName, username: input.username.trim(), password: input.password, role: 'user', createdAt: new Date().toISOString() };
   const saved = writeJson(USERS_KEY, [...users.value, user]);

@@ -2,29 +2,43 @@
 import { it, expect, vi } from 'vitest';
 import { POSTS_KEY, listPosts, getPost, formatPostDate, excerpt, createPost, updatePost, deletePost, canMutatePost } from '../utils/posts.js';
 import { writeJson } from '../utils/storage.js';
-const post = { id: 'p1', title: 'A note', content: 'First line\nSecond line', createdAt: '2026-01-02T00:00:00.000Z', authorId: 'u1', authorName: 'Avery' };
+const post = { id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1', title: 'A note', content: 'First line\nSecond line', createdAt: '2026-01-02T00:00:00.000Z', authorId: '11111111-1111-4111-8111-111111111111', authorName: 'Avery' };
+const secondId = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa2';
+const thirdId = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa3';
+const otherPostId = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbb4';
+const otherUserId = '55555555-5555-4555-8555-555555555555';
 it('returns an empty successful list and null lookup for absent storage', () => {
   expect(listPosts()).toEqual({ ok: true, value: [] });
   expect(getPost('missing')).toEqual({ ok: true, value: null });
   expect(localStorage.getItem(POSTS_KEY)).toBeNull();
 });
 it('sorts newest first with stable ties, rereads changes and never rewrites bytes', () => {
-  const second = { ...post, id: 'p2' };
-  const newest = { ...post, id: 'p3', createdAt: '2026-02-02T00:00:00Z' };
+  const second = { ...post, id: secondId };
+  const newest = { ...post, id: thirdId, createdAt: '2026-02-02T00:00:00Z' };
   writeJson(POSTS_KEY, [post, newest, second]);
   const raw = localStorage.getItem(POSTS_KEY);
-  expect(listPosts().value.map(({ id }) => id)).toEqual(['p3', 'p1', 'p2']);
-  expect(getPost('p2')).toEqual({ ok: true, value: second });
+  expect(listPosts().value.map(({ id }) => id)).toEqual([thirdId, post.id, secondId]);
+  expect(getPost(secondId)).toEqual({ ok: true, value: second });
   expect(getPost('absent')).toEqual({ ok: true, value: null });
   expect(localStorage.getItem(POSTS_KEY)).toBe(raw);
   writeJson(POSTS_KEY, [newest]);
-  expect(getPost('p2').value).toBeNull();
+  expect(getPost(secondId).value).toBeNull();
 });
 it.each([null, {}, 'text', 12, true, [null], [[]], [{ ...post, extra: 'no' }]])('rejects malformed collection %j without repair', (value) => {
   writeJson(POSTS_KEY, value);
   const raw = localStorage.getItem(POSTS_KEY);
   expect(listPosts().error.code).toBe('CORRUPT_DATA');
-  expect(getPost('p1').error.code).toBe('CORRUPT_DATA');
+  expect(getPost(post.id).error.code).toBe('CORRUPT_DATA');
+  expect(localStorage.getItem(POSTS_KEY)).toBe(raw);
+});
+it.each(['p1', 'admin', 'not-a-uuid', 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaZ', ` ${post.id}`, `${post.id} `])('rejects malformed persisted Post ID %s without changing bytes', (id) => {
+  const raw = JSON.stringify([{ ...post, id }], null, 2);
+  localStorage.setItem(POSTS_KEY, raw);
+  expect(listPosts().error.code).toBe('CORRUPT_DATA');
+  expect(getPost(post.id).error.code).toBe('CORRUPT_DATA');
+  expect(createPost(input, owner).error.code).toBe('CORRUPT_DATA');
+  expect(updatePost(post.id, input, owner).error.code).toBe('CORRUPT_DATA');
+  expect(deletePost(post.id, owner, () => true).error.code).toBe('CORRUPT_DATA');
   expect(localStorage.getItem(POSTS_KEY)).toBe(raw);
 });
 for (const field of Object.keys(post)) {
@@ -49,15 +63,15 @@ it.each(['2026-01-02T00:00:00Z', '2026-01-02T00:00:00.1Z', '2024-02-29T23:59:59.
 it('propagates parse failure and keeps corrupt bytes intact', () => {
   localStorage.setItem(POSTS_KEY, '!');
   expect(listPosts().error.code).toBe('CORRUPT_DATA');
-  expect(getPost('p1').error.code).toBe('CORRUPT_DATA');
+  expect(getPost(post.id).error.code).toBe('CORRUPT_DATA');
   expect(localStorage.getItem(POSTS_KEY)).toBe('!');
 });
 it('propagates unavailable storage from both readers', () => {
   vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => { throw new Error('denied'); });
   expect(listPosts().error.code).toBe('STORAGE_UNAVAILABLE');
-  expect(getPost('p1').error.code).toBe('STORAGE_UNAVAILABLE');
+  expect(getPost(post.id).error.code).toBe('STORAGE_UNAVAILABLE');
 });
-it.each([['2026-01-02T00:00:00Z', 'Jan 02 2026'], ['2026-12-31T23:59:59Z', 'Dec 31 2026'], ['bad', 'Unknown date'], [null, 'Unknown date']])('formats %s as %s', (value, expected) => {
+it.each([['2026-01-02T00:00:00Z', 'Jan 02, 2026'], ['2026-12-31T23:59:59Z', 'Dec 31, 2026'], ['bad', 'Unknown date'], [null, 'Unknown date']])('formats %s as %s', (value, expected) => {
   expect(formatPostDate(value)).toBe(expected);
 });
 it.each([0, 1, 119, 120, 121, 10000])('takes exactly the first 120 characters from length %i', (length) => {
@@ -69,13 +83,13 @@ it('preserves plain text and whitespace and tolerates invalid excerpt input', ()
   expect(excerpt(null)).toBe('');
 });
 
-const owner = { userId: 'u1', username: 'avery', displayName: 'Avery', role: 'user' };
+const owner = { userId: post.authorId, username: 'avery', displayName: 'Avery', role: 'user' };
 const administrator = { ...owner, userId: 'admin', role: 'admin' };
 const input = { title: '  New title  ', content: '\n <script>bad()</script>\n' + 'x'.repeat(10000) + '\n ' };
 const mutations = [
   (actor) => createPost(input, actor),
-  (actor) => updatePost('p1', input, actor),
-  (actor) => deletePost('p1', actor, () => true)
+  (actor) => updatePost(post.id, input, actor),
+  (actor) => deletePost(post.id, actor, () => true)
 ];
 for (const mutate of mutations) {
   it.each([null, undefined, {}, { ...owner, role: undefined }, { ...owner, role: '' }, { ...owner, role: 'root' }, { ...owner, role: 1 }])('rejects missing or invalid mutation role %j', (actor) => {
@@ -124,7 +138,7 @@ for (const mutate of mutations) {
     expect(localStorage.getItem(POSTS_KEY)).toBe(raw);
   });
 }
-for (const save of [(value) => createPost(value, owner), (value) => updatePost('p1', value, owner)]) {
+for (const save of [(value) => createPost(value, owner), (value) => updatePost(post.id, value, owner)]) {
   it.each([null, undefined, {}, [], 'text', 1, true])('rejects invalid post input %j', (value) => {
     expect(save(value).error.code).toBe('VALIDATION');
     expect(localStorage.getItem(POSTS_KEY)).toBeNull();
@@ -152,24 +166,24 @@ for (const actor of [owner, administrator]) {
   it(`updates only title/content and preserves reread metadata for ${actor.role}`, () => {
     writeJson(POSTS_KEY, [post]);
     const fresh = { ...post, authorName: 'Fresh name', createdAt: '2026-03-01T00:00:00Z' };
-    writeJson(POSTS_KEY, [fresh, { ...post, id: 'other' }]);
-    const saved = updatePost('p1', { ...input, authorId: 'spoof', createdAt: 'bad' }, actor);
+    writeJson(POSTS_KEY, [fresh, { ...post, id: otherPostId }]);
+    const saved = updatePost(post.id, { ...input, authorId: 'spoof', createdAt: 'bad' }, actor);
     expect(saved).toEqual({ ok: true, value: { ...fresh, ...input } });
-    expect(getPost('p1').value).toEqual({ ...fresh, ...input });
-    expect(getPost('other').value).toEqual({ ...post, id: 'other' });
+    expect(getPost(post.id).value).toEqual({ ...fresh, ...input });
+    expect(getPost(otherPostId).value).toEqual({ ...post, id: otherPostId });
   });
   it(`deletes confirmed target only for ${actor.role}`, () => {
-    writeJson(POSTS_KEY, [post, { ...post, id: 'other' }]);
-    expect(deletePost('p1', actor, () => true)).toEqual({ ok: true, value: null });
-    expect(getPost('p1').value).toBeNull();
-    expect(listPosts().value).toEqual([{ ...post, id: 'other' }]);
+    writeJson(POSTS_KEY, [post, { ...post, id: otherPostId }]);
+    expect(deletePost(post.id, actor, () => true)).toEqual({ ok: true, value: null });
+    expect(getPost(post.id).value).toBeNull();
+    expect(listPosts().value).toEqual([{ ...post, id: otherPostId }]);
   });
 }
-it.each(['missing', 'throws', 'empty', 'no-crypto'])('fails closed when native UUID is %s', (mode) => {
+it.each(['missing', 'throws', 'empty', 'malformed', 'no-crypto'])('fails closed when native UUID is %s', (mode) => {
   writeJson(POSTS_KEY, [post]);
   const raw = localStorage.getItem(POSTS_KEY);
   vi.stubGlobal('crypto', mode === 'no-crypto' ? undefined : mode === 'missing' ? {} : {
-    randomUUID: () => { if (mode === 'throws') throw new Error('unsupported'); return ''; }
+    randomUUID: () => { if (mode === 'throws') throw new Error('unsupported'); return mode === 'malformed' ? 'native-id' : ''; }
   });
   expect(createPost(input, owner).error.code).toBe('ID_GENERATION_FAILED');
   expect(localStorage.getItem(POSTS_KEY)).toBe(raw);
@@ -183,8 +197,8 @@ for (const id of [null, undefined, '', '  ', 1, true, {}, []]) {
 }
 it.each([undefined, null, true, 'yes', {}])('rejects invalid confirmation callback %j', (confirm) => {
   writeJson(POSTS_KEY, [post]);
-  expect(deletePost('p1', owner, confirm).error.code).toBe('VALIDATION');
-  expect(getPost('p1').value).toEqual(post);
+  expect(deletePost(post.id, owner, confirm).error.code).toBe('VALIDATION');
+  expect(getPost(post.id).value).toEqual(post);
 });
 it('does not confirm absent targets, invalid actors or non-owners', () => {
   writeJson(POSTS_KEY, [post]);
@@ -192,37 +206,37 @@ it('does not confirm absent targets, invalid actors or non-owners', () => {
   const raw = localStorage.getItem(POSTS_KEY);
   expect(updatePost('missing', input, owner).error.code).toBe('NOT_FOUND');
   expect(deletePost('missing', owner, confirm).error.code).toBe('NOT_FOUND');
-  expect(deletePost('p1', null, confirm).error.code).toBe('FORBIDDEN_ROLE');
-  const stranger = { ...owner, userId: 'other' };
-  expect(updatePost('p1', input, stranger).error.code).toBe('FORBIDDEN_OWNER');
-  expect(deletePost('p1', stranger, confirm).error.code).toBe('FORBIDDEN_OWNER');
+  expect(deletePost(post.id, null, confirm).error.code).toBe('FORBIDDEN_ROLE');
+  const stranger = { ...owner, userId: otherUserId };
+  expect(updatePost(post.id, input, stranger).error.code).toBe('FORBIDDEN_OWNER');
+  expect(deletePost(post.id, stranger, confirm).error.code).toBe('FORBIDDEN_OWNER');
   expect(confirm).not.toHaveBeenCalled();
   expect(localStorage.getItem(POSTS_KEY)).toBe(raw);
 });
 it('rechecks changed ownership and removed targets before mutations', () => {
   writeJson(POSTS_KEY, [post]);
-  expect(canMutatePost(getPost('p1').value, owner)).toBe(true);
-  writeJson(POSTS_KEY, [{ ...post, authorId: 'other' }]);
+  expect(canMutatePost(getPost(post.id).value, owner)).toBe(true);
+  writeJson(POSTS_KEY, [{ ...post, authorId: otherUserId }]);
   const raw = localStorage.getItem(POSTS_KEY);
-  expect(updatePost('p1', input, owner).error.code).toBe('FORBIDDEN_OWNER');
-  expect(deletePost('p1', owner, () => true).error.code).toBe('FORBIDDEN_OWNER');
+  expect(updatePost(post.id, input, owner).error.code).toBe('FORBIDDEN_OWNER');
+  expect(deletePost(post.id, owner, () => true).error.code).toBe('FORBIDDEN_OWNER');
   expect(localStorage.getItem(POSTS_KEY)).toBe(raw);
   writeJson(POSTS_KEY, []);
-  expect(updatePost('p1', input, owner).error.code).toBe('NOT_FOUND');
-  expect(deletePost('p1', owner, () => true).error.code).toBe('NOT_FOUND');
+  expect(updatePost(post.id, input, owner).error.code).toBe('NOT_FOUND');
+  expect(deletePost(post.id, owner, () => true).error.code).toBe('NOT_FOUND');
 });
 it('cancelled confirmation retains exact bytes and writes nothing', () => {
   writeJson(POSTS_KEY, [post]);
   const raw = localStorage.getItem(POSTS_KEY);
   const write = vi.spyOn(Storage.prototype, 'setItem');
-  expect(deletePost('p1', owner, () => false).error.code).toBe('CANCELLED');
+  expect(deletePost(post.id, owner, () => false).error.code).toBe('CANCELLED');
   expect(write).not.toHaveBeenCalled();
   expect(localStorage.getItem(POSTS_KEY)).toBe(raw);
 });
 it('policy accepts owner/admin only with valid session and post', () => {
   expect(canMutatePost(post, owner)).toBe(true);
   expect(canMutatePost(post, administrator)).toBe(true);
-  expect(canMutatePost(post, { ...owner, userId: 'stranger' })).toBe(false);
+  expect(canMutatePost(post, { ...owner, userId: '66666666-6666-4666-8666-666666666666' })).toBe(false);
   for (const actor of [null, {}, { role: 'admin' }, { ...owner, role: 'root' }]) expect(canMutatePost(post, actor)).toBe(false);
   for (const value of [null, {}, { ...post, content: '' }]) expect(canMutatePost(value, owner)).toBe(false);
 });

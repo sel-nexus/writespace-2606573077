@@ -1,6 +1,6 @@
 /** Read and mutate browser-local plain-text posts with fail-closed ownership checks. */
 import { readJson, writeJson } from './storage.js';
-import { failure, success, isNonEmptyString, isIsoTimestamp, isSession, isRole } from './validation.js';
+import { failure, success, isUuid, isNonEmptyString, isIsoTimestamp, isSession, isRole } from './validation.js';
 /** @typedef {{id:string,title:string,content:string,createdAt:string,authorId:string,authorName:string}} Post */
 export const POSTS_KEY = 'writespace_posts';
 const fields = ['id', 'title', 'content', 'createdAt', 'authorId', 'authorName'];
@@ -9,8 +9,7 @@ const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 function isPost(post) {
   if (!post || typeof post !== 'object' || Array.isArray(post)) return false;
   if (Object.keys(post).length !== fields.length || !fields.every((key) => isNonEmptyString(post[key]))) return false;
-  if (!isIsoTimestamp(post.createdAt)) return false;
-  return new Date(post.createdAt).toISOString().slice(0, 19) === post.createdAt.slice(0, 19);
+  return isUuid(post.id) && isIsoTimestamp(post.createdAt);
 }
 /** Read fresh records, newest first, preserving input order on timestamp ties. @returns {import('./validation.js').Result<Post[]>} */
 export function listPosts() {
@@ -51,7 +50,7 @@ export function createPost(input, actor) {
   let id;
   try {
     id = globalThis.crypto.randomUUID();
-    if (!isNonEmptyString(id)) throw new Error('Missing ID');
+    if (!isUuid(id)) throw new Error('Invalid ID');
   } catch {
     return failure('ID_GENERATION_FAILED', 'Could not generate a post ID. Please retry in a browser with native UUID support.');
   }
@@ -94,7 +93,7 @@ export function deletePost(id, actor, confirm) {
 export function formatPostDate(value) {
   if (!isIsoTimestamp(value)) return 'Unknown date';
   const date = new Date(value);
-  return `${months[date.getUTCMonth()]} ${String(date.getUTCDate()).padStart(2, '0')} ${date.getUTCFullYear()}`;
+  return `${months[date.getUTCMonth()]} ${String(date.getUTCDate()).padStart(2, '0')}, ${date.getUTCFullYear()}`;
 }
 /** Return only the first 120 plain-text characters, with no markup or added suffix. @param {string} content @returns {string} */
 export function excerpt(content) { return typeof content === 'string' ? content.slice(0, 120) : ''; }

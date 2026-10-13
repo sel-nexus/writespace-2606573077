@@ -16,10 +16,10 @@ it.each(['user', 'admin'])('creates exact %s record with native UUID and timesta
   vi.spyOn(globalThis.crypto, 'randomUUID').mockReturnValue(id);
   vi.useFakeTimers(); vi.setSystemTime(new Date('2026-02-03T04:05:06.000Z'));
   try {
-    writeJson(USERS_KEY, [{ ...record, id: 'existing', username: 'existing' }]);
+    writeJson(USERS_KEY, [{ ...record, id: '44444444-4444-4444-8444-444444444444', username: 'existing' }]);
     const result = createAdminUser({ ...input, role }, admin);
     expect(result).toEqual({ ok: true, value: { id, ...input, username: 'Riley', role, createdAt: '2026-02-03T04:05:06.000Z' } });
-    expect(listUsers().value).toEqual([{ ...record, id: 'existing', username: 'existing' }, result.value]);
+    expect(listUsers().value).toEqual([{ ...record, id: '44444444-4444-4444-8444-444444444444', username: 'existing' }, result.value]);
     expect(localStorage.getItem('writespace_session')).toBeNull();
   } finally { vi.useRealTimers(); }
 });
@@ -102,21 +102,22 @@ it('cancels eligible deletion without writing', () => {
   fails(deleteUser(id, admin, () => false), 'CANCELLED'); expect(listUsers().value).toEqual([record]); expect(write).not.toHaveBeenCalled();
 });
 it('deletes only the fresh target and never cascades posts or session', () => {
-  writeJson(USERS_KEY, [record, { ...record, id: 'other', username: 'other' }]);
+  writeJson(USERS_KEY, [record, { ...record, id: '55555555-5555-4555-8555-555555555555', username: 'other' }]);
   localStorage.setItem('writespace_posts', 'posts preserved'); localStorage.setItem('writespace_session', 'session preserved');
   expect(canDeleteUser(id, admin)).toBe(true); expect(deleteUser(id, admin, () => true)).toEqual({ ok: true, value: null });
-  expect(listUsers().value).toEqual([{ ...record, id: 'other', username: 'other' }]);
+  expect(listUsers().value).toEqual([{ ...record, id: '55555555-5555-4555-8555-555555555555', username: 'other' }]);
   expect(localStorage.getItem('writespace_posts')).toBe('posts preserved'); expect(localStorage.getItem('writespace_session')).toBe('session preserved');
   fails(deleteUser(id, admin, () => true), 'NOT_FOUND');
 });
 it('computes pure counts with fixed admin once and regular users separately', () => {
-  const users = [record, { ...record, id: 'a2', username: 'a2', role: 'admin' }];
-  const post = { id: 'p1', title: 'Title', content: 'Text', authorId: id, authorName: 'Riley', createdAt: record.createdAt };
-  expect(dashboardMetrics([post, { ...post, id: 'p2' }], users)).toEqual({ totalPosts: 2, totalUsers: 3, totalAdmins: 2, regularUsers: 1 });
+  const users = [record, { ...record, id: '33333333-3333-4333-8333-333333333333', username: 'a2', role: 'admin' }];
+  const post = { id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1', title: 'Title', content: 'Text', authorId: id, authorName: 'Riley', createdAt: record.createdAt };
+  expect(dashboardMetrics([post, { ...post, id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa2' }], users)).toEqual({ totalPosts: 2, totalUsers: 3, totalAdmins: 2, regularUsers: 1 });
   expect(users).toHaveLength(2);
-  expect(dashboardMetrics([], [...users, { ...record, id: 'admin', username: 'admin', role: 'admin' }]).totalAdmins).toBe(2);
+  expect(dashboardMetrics([], [...users, { ...record, id: '77777777-7777-4777-8777-777777777777', username: 'admin', role: 'admin' }]).totalAdmins).toBe(2);
+  expect(dashboardMetrics([], [...users, { ...record, id: 'admin', username: 'admin', role: 'admin' }])).toEqual({ totalPosts: 0, totalUsers: 1, totalAdmins: 1, regularUsers: 0 });
 });
-it.each([undefined, null, 0, 'invalid', {}, [], [null], [{}], [{ id: 'p1', createdAt: 'invalid' }]])('handles empty/invalid metric posts %j', (posts) => {
+it.each([undefined, null, 0, 'invalid', {}, [], [null], [{}], [{ id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1', createdAt: 'invalid' }]])('handles empty/invalid metric posts %j', (posts) => {
   expect(dashboardMetrics(posts, []).totalPosts).toBe(0);
 });
 it.each([undefined, null, 0, 'invalid', {}, [], [null], [{}]])('handles empty/invalid metric users %j', (users) => {

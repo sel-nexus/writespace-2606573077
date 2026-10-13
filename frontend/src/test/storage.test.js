@@ -2,10 +2,11 @@
 import { describe, it, expect, vi } from 'vitest';
 import { readJson, writeJson, removeKey } from '../utils/storage.js';
 import { listUsers, USERS_KEY } from '../utils/users.js';
+import { listPosts, POSTS_KEY } from '../utils/posts.js';
 import { getSession, setSession, SESSION_KEY } from '../utils/session.js';
-import { isUser, isSession, isRole, isIsoTimestamp, isNonEmptyString, normalizeUsername, requiredErrors } from '../utils/validation.js';
-const account = { id: 'u1', displayName: 'Avery', username: 'avery', password: 'demo', role: 'user', createdAt: '2026-01-01T00:00:00.000Z' };
-const session = { userId: 'u1', displayName: 'Avery', username: 'avery', role: 'user' };
+import { isUuid, isUser, isSession, isRole, isIsoTimestamp, isNonEmptyString, normalizeUsername, requiredErrors } from '../utils/validation.js';
+const account = { id: '11111111-1111-4111-8111-111111111111', displayName: 'Avery', username: 'avery', password: 'demo', role: 'user', createdAt: '2026-01-01T00:00:00.000Z' };
+const session = { userId: account.id, displayName: 'Avery', username: 'avery', role: 'user' };
 
 describe('JSON storage', () => {
   it('returns fallback only for a missing key and rereads written JSON', () => {
@@ -71,7 +72,7 @@ describe('typed record boundaries', () => {
     setSession({ ...session, role: 'admin' });
     expect(getSession().value.role).toBe('admin');
   });
-  it.each([null, {}, 'text', [null], [{ ...account, extra: true }], [{ ...account, role: 'owner' }], [{ ...account, createdAt: 'January 1' }]])('rejects malformed user roots/members %j', (value) => {
+  it.each([null, {}, 'text', [null], [{ ...account, id: 'native-id' }], [{ ...account, id: 'admin' }], [{ ...account, id: ` ${account.id}` }], [{ ...account, extra: true }], [{ ...account, role: 'owner' }], [{ ...account, createdAt: 'January 1' }]])('rejects malformed user roots/members %j', (value) => {
     writeJson(USERS_KEY, value);
     const bytes = window.localStorage.getItem(USERS_KEY);
     expect(listUsers().error.code).toBe('CORRUPT_DATA');
@@ -85,12 +86,58 @@ describe('typed record boundaries', () => {
       expect(isUser(value)).toBe(false);
     }
   });
+  it.each(['u1', 'admin', 'not-a-uuid', ` ${account.id}`, `${account.id} `])('rejects malformed persisted User ID %s with exact byte preservation', (id) => {
+    const bytes = JSON.stringify([{ ...account, id }], null, 2);
+    localStorage.setItem(USERS_KEY, bytes);
+    expect(listUsers().error.code).toBe('CORRUPT_DATA');
+    expect(localStorage.getItem(USERS_KEY)).toBe(bytes);
+  });
+  it.each([
+    '2024-02-29T23:59:59Z',
+    '2024-02-29T23:59:59.1Z',
+    '2024-02-29T23:59:59.12Z',
+    '2024-02-29T23:59:59.123Z'
+  ])('accepts real leap-day timestamps %s without changing user or post bytes', (createdAt) => {
+    expect(isIsoTimestamp(createdAt)).toBe(true);
+    const user = { ...account, createdAt };
+    const post = { id: account.id, title: 'Leap day', content: 'Keep text', createdAt,
+      authorId: account.id, authorName: account.displayName };
+    for (const [key, record, read] of [[USERS_KEY, user, listUsers], [POSTS_KEY, post, listPosts]]) {
+      const bytes = JSON.stringify([record], null, 2);
+      localStorage.setItem(key, bytes);
+      expect(read()).toEqual({ ok: true, value: [record] });
+      expect(localStorage.getItem(key)).toBe(bytes);
+    }
+  });
+  it.each([
+    '2024-02-30T00:00:00Z',
+    '2026-02-29T00:00:00Z',
+    '2024-02-29T24:00:00Z'
+  ])('rejects calendar/time rollover %s with exact user and post byte preservation', (createdAt) => {
+    expect(isIsoTimestamp(createdAt)).toBe(false);
+    const user = { ...account, createdAt };
+    expect(isUser(user)).toBe(false);
+    const post = { id: account.id, title: 'Invalid date', content: 'Keep text', createdAt,
+      authorId: account.id, authorName: account.displayName };
+    for (const [key, record, read] of [[USERS_KEY, user, listUsers], [POSTS_KEY, post, listPosts]]) {
+      const bytes = JSON.stringify([record], null, 2);
+      localStorage.setItem(key, bytes);
+      expect(read().error.code).toBe('CORRUPT_DATA');
+      expect(localStorage.getItem(key)).toBe(bytes);
+    }
+  });
+  it('accepts the fixed admin only as a session identity, not a collection User ID', () => {
+    const admin = { userId: 'admin', username: 'admin', displayName: 'Admin', role: 'admin' };
+    expect(setSession(admin)).toEqual({ ok: true, value: undefined });
+    expect(getSession().value).toEqual(admin);
+    expect(isUser({ ...account, id: 'admin', role: 'admin' })).toBe(false);
+  });
   it('rejects case-insensitive duplicates and preserves bytes', () => {
-    writeJson(USERS_KEY, [account, { ...account, id: 'u2', username: ' AVERY ' }]);
+    writeJson(USERS_KEY, [account, { ...account, id: '22222222-2222-4222-8222-222222222222', username: ' AVERY ' }]);
     expect(listUsers().error.code).toBe('CORRUPT_DATA');
     expect(readJson(USERS_KEY, []).value).toHaveLength(2);
   });
-  it.each([[], 'bad', { ...session, password: 'bad' }, { ...session, role: 'owner' }])('rejects malformed session %j', (value) => {
+  it.each([[], 'bad', { ...session, userId: 'native-id' }, { ...session, password: 'bad' }, { ...session, role: 'owner' }])('rejects malformed session %j', (value) => {
     writeJson(SESSION_KEY, value);
     expect(getSession().error.code).toBe('CORRUPT_DATA');
     expect(setSession(value).error.code).toBe('VALIDATION');
@@ -112,6 +159,13 @@ describe('typed record boundaries', () => {
     vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => { throw new Error('no'); });
     expect(listUsers().error.code).toBe('STORAGE_UNAVAILABLE');
     expect(getSession().error.code).toBe('STORAGE_UNAVAILABLE');
+  });
+  it('validates UUID syntax without normalizing malformed values', () => {
+    expect(isUuid(account.id)).toBe(true);
+    expect(isUuid('AAAAAAAA-AAAA-4AAA-8AAA-AAAAAAAAAAAA')).toBe(true);
+    for (const value of [undefined, null, 123, {}, [], '', 'admin', 'u1', account.id.replaceAll('-', ''), ` ${account.id}`, `${account.id} `]) {
+      expect(isUuid(value)).toBe(false);
+    }
   });
   it('validates text, role, ISO timestamps and missing form objects', () => {
     expect(normalizeUsername(' AVERY ')).toBe('avery');

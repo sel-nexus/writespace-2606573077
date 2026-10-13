@@ -76,6 +76,58 @@ test('fixed admin creates both roles; duplicate, cancellation, reload and confir
   expect(browserErrors).toEqual([]);
 });
 
+test('account cards and table switch exclusively at 639/640 with complete metadata and actions', async ({ page, seedStorage, browserErrors }) => {
+  const session = { userId: 'admin', username: 'admin', displayName: 'Admin', role: 'admin' };
+  await seedStorage({ writespace_session: session, writespace_users: [owner], writespace_posts: [post] });
+  await page.goto('/');
+  await page.getByRole('link', { name: 'Go to Dashboard' }).click();
+  await page.getByRole('link', { name: 'Manage Users', exact: true }).click();
+  await expect(page).toHaveURL(/\/users$/);
+  const table = page.locator('table');
+  const cards = page.locator('[aria-label="Account cards"]');
+  for (const width of [639, 640]) {
+    await page.setViewportSize({ width, height: 900 });
+    let account;
+    let fixed;
+    if (width === 639) {
+      await expect(cards).toBeVisible();
+      await expect(table).toBeHidden();
+      await expect(cards.getByRole('article')).toHaveCount(2);
+      account = cards.getByRole('article', { name: `Account: ${owner.username}`, exact: true });
+      fixed = cards.getByRole('article', { name: 'Account: admin', exact: true });
+      for (const label of ['Username', 'Role', 'Created date']) {
+        await expect(account.locator('dt').filter({ hasText: new RegExp(`^${label}$`) })).toBeVisible();
+      }
+    } else {
+      await expect(table).toBeVisible();
+      await expect(cards).toBeHidden();
+      await expect(table.getByRole('columnheader')).toHaveText(['Account', 'Username', 'Role', 'Created date', 'Action']);
+      await expect(table.locator('tbody tr')).toHaveCount(2);
+      account = table.getByRole('row').filter({ has: page.getByRole('button', { name: `Delete account: ${owner.username}`, exact: true }) });
+      fixed = table.getByRole('row').filter({ has: page.getByRole('button', { name: 'Delete account: admin', exact: true }) });
+    }
+    await expect(account.getByRole('img', { name: 'User avatar' })).toBeVisible();
+    for (const value of [owner.displayName, owner.username, owner.role, 'Jan 01, 2026']) {
+      await expect(account.getByText(value, { exact: true })).toBeVisible();
+    }
+    await expect(account.getByRole('button', { name: `Delete account: ${owner.username}`, exact: true })).toBeVisible();
+    await expect(account.getByRole('button', { name: `Delete account: ${owner.username}`, exact: true })).toBeEnabled();
+    await expect(fixed.getByRole('img', { name: 'Administrator avatar' })).toBeVisible();
+    await expect(fixed.getByText('Admin', { exact: true })).toBeVisible();
+    await expect(fixed.getByText('admin', { exact: true })).toHaveCount(2);
+    await expect(fixed.getByText('Built-in account', { exact: true })).toBeVisible();
+    const protectedControl = fixed.getByRole('button', { name: 'Delete account: admin', exact: true });
+    await expect(protectedControl).toBeVisible();
+    await expect(protectedControl).toBeDisabled();
+    await expect(protectedControl).toHaveAttribute('title', 'Default admin cannot be deleted');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('writespace_users')))).toEqual([owner]);
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('writespace_posts')))).toEqual([post]);
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('writespace_session')))).toEqual(session);
+  }
+  expect(browserErrors).toEqual([]);
+});
+
 for (const role of ['user', 'admin']) {
   test(`admin-created ${role} logs in with correct role behavior and self protection`, async ({ page, seedStorage, browserErrors }) => {
     await seedStorage({ writespace_users: [owner] });
@@ -107,7 +159,7 @@ for (const role of ['user', 'admin']) {
 }
 
 test('dashboard edits and deletes another author with cancel/reload and accurate five-newest metrics', async ({ page, seedStorage, browserErrors }) => {
-  const posts = [1, 6, 2, 5, 3, 4].map((day) => ({ ...post, id: `p${day}`, title: `Note ${day}`, createdAt: `2026-01-0${day}T00:00:00Z` }));
+  const posts = [1, 6, 2, 5, 3, 4].map((day) => ({ ...post, id: `aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa${day}`, title: `Note ${day}`, createdAt: `2026-01-0${day}T00:00:00Z` }));
   await seedStorage({ writespace_users: [owner], writespace_posts: posts });
   await page.goto('/login');
   await signIn(page, 'admin', 'admin');
@@ -120,9 +172,9 @@ test('dashboard edits and deletes another author with cancel/reload and accurate
   await expect(page.getByLabel('Content')).toHaveValue(post.content);
   await page.getByLabel('Title').fill('Admin revision');
   await page.getByRole('button', { name: 'Save Changes' }).click();
-  await expect(page).toHaveURL(/\/blog\/p6$/);
-  const revised = await page.evaluate(() => JSON.parse(localStorage.getItem('writespace_posts')).find((item) => item.id === 'p6'));
-  expect(revised).toEqual({ ...posts.find((item) => item.id === 'p6'), title: 'Admin revision' });
+  await expect(page).toHaveURL(/\/blog\/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa6$/);
+  const revised = await page.evaluate(() => JSON.parse(localStorage.getItem('writespace_posts')).find((item) => item.id === 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa6'));
+  expect(revised).toEqual({ ...posts.find((item) => item.id === 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa6'), title: 'Admin revision' });
   await nav(page, 'Dashboard');
   page.once('dialog', (dialog) => dialog.dismiss());
   await latest.getByRole('button', { name: 'Delete post: Admin revision' }).click();

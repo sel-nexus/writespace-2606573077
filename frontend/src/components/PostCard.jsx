@@ -4,14 +4,14 @@ import { Link } from 'react-router-dom';
 import { Avatar } from './Avatar.jsx';
 import { sessionType, ui } from './ui.js';
 import { excerpt, formatPostDate, canMutatePost } from '../utils/posts.js';
-const accents = ['border-t-primary-500', 'border-t-pink-500', 'border-t-teal-500'];
+const accents = ['border-t-indigo-500', 'border-t-violet-500', 'border-t-pink-500', 'border-t-teal-500'];
 /** Link guests to sign-in and account holders to the reader. @param {object} props @returns {JSX.Element} */
 export function PostCard({ post, session = null, index = 0, showEdit = false }) {
   return (
     <article className={`flex min-w-0 flex-col gap-5 rounded-card border border-border border-t-4 bg-surface p-6 ${
       accents[((index % accents.length) + accents.length) % accents.length]}`}>
       <div className="flex items-center gap-3">
-        <Avatar role={post.authorId === 'admin' ? 'admin' : 'user'} />
+        <Avatar role={post.authorId === 'admin' ? 'admin' : 'user'} index={index} />
         <div className="min-w-0 text-sm">
           <p className="break-words font-semibold">{post.authorName}</p>
           <time dateTime={post.createdAt} className="text-foreground-muted">{formatPostDate(post.createdAt)}</time>

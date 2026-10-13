@@ -70,7 +70,13 @@ export default function AdminDashboard({ session }) {
                 <p className="text-sm text-foreground-muted">{post.authorName} · {formatPostDate(post.createdAt)}</p>
               </div>
               <div className="flex gap-4">
-                <Link to={`/edit/${encodeURIComponent(post.id)}`} aria-label={`Edit post: ${post.title}`} className={`${ui.link} inline-flex min-h-11 items-center`}>Edit</Link>
+                <Link
+                  to={`/edit/${encodeURIComponent(post.id)}`}
+                  aria-label={`Edit post: ${post.title}`}
+                  className={`${ui.link} inline-flex min-h-11 items-center`}
+                >
+                  Edit
+                </Link>
                 <button type="button" aria-label={`Delete post: ${post.title}`} onClick={() => remove(post.id)}
                   className={`${ui.focus} min-h-11 rounded-control px-3 font-semibold text-error`}>Delete</button>
               </div>

@@ -1,7 +1,7 @@
 /** Manage browser-local accounts without changing posts or the active session. */
 import { listUsers, USERS_KEY } from './users.js';
 import { writeJson } from './storage.js';
-import { failure, success, isSession, isNonEmptyString, isRole, isUser, isIsoTimestamp, normalizeUsername, requiredErrors } from './validation.js';
+import { failure, success, isUuid, isSession, isNonEmptyString, isRole, isUser, isIsoTimestamp, normalizeUsername, requiredErrors } from './validation.js';
 
 export const ADMIN_LABELS = { displayName: 'Display name', username: 'Username', password: 'Password', role: 'Role' };
 export const PROTECTED_MESSAGE = 'Default admin cannot be deleted';
@@ -44,8 +44,7 @@ export function createAdminUser(input, actor) {
   let id;
   try {
     id = globalThis.crypto.randomUUID();
-    if (typeof id !== 'string' || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)
-      || users.value.some((user) => user.id === id)) throw new Error('Invalid account ID');
+    if (!isUuid(id) || users.value.some((user) => user.id === id)) throw new Error('Invalid account ID');
   } catch {
     return failure('ID_GENERATION_FAILED', 'This browser could not create an account ID. Please retry in a supported browser.');
   }
@@ -86,7 +85,7 @@ export function dashboardMetrics(posts, users) {
     totalPosts: Array.isArray(posts) && posts.every((post) => post && typeof post === 'object'
       && !Array.isArray(post) && Object.keys(post).length === 6
       && ['id', 'title', 'content', 'authorId', 'authorName'].every((key) => isNonEmptyString(post[key]))
-      && isIsoTimestamp(post.createdAt)) ? posts.length : 0,
+      && isUuid(post.id) && isIsoTimestamp(post.createdAt)) ? posts.length : 0,
     totalUsers: registered.length + 1,
     totalAdmins: registered.filter((user) => user.role === 'admin').length + 1,
     regularUsers: registered.filter((user) => user.role === 'user').length

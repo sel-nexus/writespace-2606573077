@@ -1,7 +1,7 @@
 /** Exercise real authoring forms and persistence; executed later by the parent. */
 import { test, expect } from './fixtures.js';
-const post = { id: 'p1', title: 'Another author note', content: 'Original\ncontent', createdAt: '2026-01-02T00:00:00Z', authorId: 'u1', authorName: 'Avery' };
-const stranger = { userId: 'other', username: 'morgan', displayName: 'Morgan', role: 'user' };
+const post = { id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1', title: 'Another author note', content: 'Original\ncontent', createdAt: '2026-01-02T00:00:00Z', authorId: '11111111-1111-4111-8111-111111111111', authorName: 'Avery' };
+const stranger = { userId: '55555555-5555-4555-8555-555555555555', username: 'morgan', displayName: 'Morgan', role: 'user' };
 const admin = { userId: 'admin', username: 'admin', displayName: 'Admin', role: 'admin' };
 
 /** Open the responsive account navigation before following its link. @param {object} page @param {string} name @returns {Promise<void>} */
@@ -39,7 +39,7 @@ test('register, create, reload, read, edit, cancel and delete persist only confi
   expect(await page.getByRole('article').locator('p.whitespace-pre-wrap').textContent()).toBe(content);
   await expect(page.getByRole('article').locator('script')).toHaveCount(0);
   await page.getByRole('link', { name: 'Back to All Blogs' }).click();
-  await page.getByRole('link', { name: 'Read post: ' + title, exact: true }).click();
+  await page.getByRole('link', { name: ('Read post: ' + title).replace(/\s+/g, ' ').trim(), exact: true }).click();
   await page.getByRole('link', { name: 'Edit', exact: true }).click();
   await expect(page.getByRole('textbox', { name: 'Title' })).toHaveValue(title);
   await expect(page.getByRole('textbox', { name: 'Content' })).toHaveValue(content);
@@ -57,7 +57,7 @@ test('register, create, reload, read, edit, cancel and delete persist only confi
   await page.getByRole('textbox', { name: 'Title' }).fill('Unsaved second note');
   await page.getByRole('link', { name: 'Cancel', exact: true }).click();
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('writespace_posts')))).toEqual([revised]);
-  await page.getByRole('link', { name: 'Read post: ' + revised.title, exact: true }).click();
+  await page.getByRole('link', { name: ('Read post: ' + revised.title).replace(/\s+/g, ' ').trim(), exact: true }).click();
   page.once('dialog', (dialog) => dialog.dismiss());
   await page.getByRole('button', { name: 'Delete', exact: true }).click();
   await expect(page).toHaveURL(new RegExp('/blog/' + saved.id + '$'));
@@ -70,7 +70,7 @@ test('register, create, reload, read, edit, cancel and delete persist only confi
   expect(browserErrors).toEqual([]);
 });
 
-for (const entry of ['/blogs', '/edit/p1']) {
+for (const entry of ['/blogs', '/edit/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1']) {
   test(`non-owner ${entry} entry hides mutation controls and preserves another author's data`, async ({ page, seedStorage, browserErrors }) => {
     await seedStorage({ writespace_session: stranger, writespace_posts: [post] });
     await page.goto(entry);
@@ -102,7 +102,7 @@ test('admin edits another author through list and reader without changing attrib
   expect(browserErrors).toEqual([]);
 });
 
-for (const entry of ['/write', '/edit/p1']) {
+for (const entry of ['/write', '/edit/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1']) {
   test(`guest initial writing route ${entry} is guarded`, async ({ page, seedStorage, browserErrors }) => {
     await seedStorage({ writespace_posts: [post] });
     await page.goto(entry);

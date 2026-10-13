@@ -7,7 +7,7 @@ import { Alert } from '../components/Alert.jsx';
 import { sessionType, ui } from '../components/ui.js';
 import { listUsers } from '../utils/users.js';
 import { createAdminUser, deleteUser, canDeleteUser, ADMIN_LABELS, PROTECTED_MESSAGE, SELF_MESSAGE } from '../utils/admin.js';
-import { requiredErrors, isRole } from '../utils/validation.js';
+import { requiredErrors } from '../utils/validation.js';
 import { formatPostDate } from '../utils/posts.js';
 
 const emptyForm = { displayName: '', username: '', password: '', role: '' };
@@ -19,7 +19,12 @@ const badge = { admin: 'bg-secondary-100 text-secondary-800', user: 'bg-primary-
 function DeleteControl({ account, session, onDelete }) {
   const reason = account.id === 'admin' ? PROTECTED_MESSAGE : account.id === session.userId ? SELF_MESSAGE : '';
   return (
-    <span title={reason || undefined} tabIndex={reason ? 0 : undefined} aria-label={reason || undefined} className={`inline-flex rounded-control ${ui.focus}`}>
+    <span
+      title={reason || undefined}
+      tabIndex={reason ? 0 : undefined}
+      aria-label={reason || undefined}
+      className={`inline-flex rounded-control ${ui.focus}`}
+    >
       <button type="button" disabled={!canDeleteUser(account.id, session)} title={reason || undefined}
         aria-label={`Delete account: ${account.username}`} onClick={() => onDelete(account.id)}
         className={`${ui.focus} min-h-11 rounded-control px-3 font-semibold text-error disabled:cursor-not-allowed disabled:opacity-50`}>Delete</button>
@@ -40,7 +45,6 @@ export default function Users({ session }) {
   function submit(event) {
     event.preventDefault();
     const invalid = requiredErrors(values, ADMIN_LABELS);
-    if (!invalid.role && !isRole(values.role)) invalid.role = 'Select user or admin.';
     setFeedback({ message: '', variant: 'info' });
     if (Object.keys(invalid).length) {
       setErrors(invalid);

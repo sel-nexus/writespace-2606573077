@@ -11,6 +11,10 @@ export function success(value) { return { ok: true, value }; }
 export function failure(code, message) { return { ok: false, error: { code, message } }; }
 /** Test required text without altering it. @param {unknown} value @returns {boolean} */
 export function isNonEmptyString(value) { return typeof value === 'string' && value.trim().length > 0; }
+/** Test UUID text without trimming or repairing it. @param {unknown} value @returns {boolean} */
+export function isUuid(value) {
+  return typeof value === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
+}
 /** Normalize a username for comparisons. @param {string} value @returns {string} */
 export function normalizeUsername(value) { return value.trim().toLowerCase(); }
 /** Test the two supported roles. @param {unknown} value @returns {boolean} */
@@ -20,19 +24,21 @@ function hasExactTextKeys(value, keys) {
   return value !== null && typeof value === 'object' && !Array.isArray(value)
     && Object.keys(value).length === keys.length && keys.every((key) => isNonEmptyString(value[key]));
 }
-/** Validate an ISO timestamp rather than accepting arbitrary date text. @param {unknown} value @returns {boolean} */
+/** Validate real ISO calendar timestamps without accepting date/time rollover. @param {unknown} value @returns {boolean} */
 export function isIsoTimestamp(value) {
   return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z$/.test(value)
-    && Number.isFinite(Date.parse(value));
+    && Number.isFinite(Date.parse(value))
+    && new Date(value).toISOString().slice(0, 19) === value.slice(0, 19);
 }
 /** Validate the exact account schema. @param {unknown} value @returns {boolean} */
 export function isUser(value) {
   return hasExactTextKeys(value, ['id', 'displayName', 'username', 'password', 'role', 'createdAt'])
-    && isRole(value.role) && isIsoTimestamp(value.createdAt);
+    && isUuid(value.id) && isRole(value.role) && isIsoTimestamp(value.createdAt);
 }
 /** Validate a password-free session. @param {unknown} value @returns {boolean} */
 export function isSession(value) {
-  return hasExactTextKeys(value, ['userId', 'username', 'displayName', 'role']) && isRole(value.role);
+  return hasExactTextKeys(value, ['userId', 'username', 'displayName', 'role']) && isRole(value.role)
+    && (value.userId === 'admin' || isUuid(value.userId));
 }
 /** Return all required-field errors in form order. @param {object} input @param {Object<string,string>} labels @returns {Object<string,string>} */
 export function requiredErrors(input, labels) {

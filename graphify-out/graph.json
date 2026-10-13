@@ -10,6 +10,75 @@
       "community": 7
     },
     {
+      "id": "frontend_e2e_admin_spec",
+      "label": "admin.spec.js",
+      "file_type": "code",
+      "source_file": "frontend/e2e/admin.spec.js",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_e2e_admin_spec_owner",
+      "label": "owner",
+      "file_type": "code",
+      "source_file": "frontend/e2e/admin.spec.js",
+      "source_location": "L3",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_e2e_admin_spec_post",
+      "label": "post",
+      "file_type": "code",
+      "source_file": "frontend/e2e/admin.spec.js",
+      "source_location": "L4",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_e2e_admin_spec_nav",
+      "label": "nav()",
+      "file_type": "code",
+      "source_file": "frontend/e2e/admin.spec.js",
+      "source_location": "L6",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_e2e_admin_spec_signin",
+      "label": "signIn()",
+      "file_type": "code",
+      "source_file": "frontend/e2e/admin.spec.js",
+      "source_location": "L12",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_e2e_admin_spec_logout",
+      "label": "logout()",
+      "file_type": "code",
+      "source_file": "frontend/e2e/admin.spec.js",
+      "source_location": "L18",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_e2e_admin_spec_create",
+      "label": "create()",
+      "file_type": "code",
+      "source_file": "frontend/e2e/admin.spec.js",
+      "source_location": "L24",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_e2e_admin_spec_accounts",
+      "label": "accounts()",
+      "file_type": "code",
+      "source_file": "frontend/e2e/admin.spec.js",
+      "source_location": "L32",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
       "id": "frontend_e2e_fixtures",
       "label": "fixtures.js",
       "file_type": "code",
@@ -567,21 +636,11 @@
       "community": 2
     },
     {
-      "id": "frontend_src_app_accounthome",
-      "label": "AccountHome()",
-      "file_type": "code",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L23",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2
-    },
-    {
       "id": "frontend_src_app_routenavbar",
       "label": "RouteNavbar()",
       "file_type": "code",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L48",
+      "source_location": "L24",
       "_callable": true,
       "_origin": "ast"
     },
@@ -590,7 +649,7 @@
       "label": "App()",
       "file_type": "code",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L59",
+      "source_location": "L35",
       "_callable": true,
       "_origin": "ast",
       "community": 2
@@ -859,6 +918,23 @@
       "community": 2
     },
     {
+      "id": "frontend_src_pages_admindashboard",
+      "label": "AdminDashboard.jsx",
+      "file_type": "code",
+      "source_file": "frontend/src/pages/AdminDashboard.jsx",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_pages_admindashboard_admindashboard",
+      "label": "AdminDashboard()",
+      "file_type": "code",
+      "source_file": "frontend/src/pages/AdminDashboard.jsx",
+      "source_location": "L11",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
       "id": "frontend_src_pages_blogdetail",
       "label": "BlogDetail.jsx",
       "file_type": "code",
@@ -973,6 +1049,64 @@
       "community": 2
     },
     {
+      "id": "frontend_src_pages_users",
+      "label": "Users.jsx",
+      "file_type": "code",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_pages_users_emptyform",
+      "label": "emptyForm",
+      "file_type": "code",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L13",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_pages_users_fixedadmin",
+      "label": "fixedAdmin",
+      "file_type": "code",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L15",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_pages_users_badge",
+      "label": "badge",
+      "file_type": "code",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L16",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_pages_users_deletecontrol",
+      "label": "DeleteControl()",
+      "file_type": "code",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L19",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_pages_users_accounttype",
+      "label": "accountType",
+      "file_type": "code",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L29",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_pages_users_users",
+      "label": "Users()",
+      "file_type": "code",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L33",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
       "id": "frontend_src_pages_writeblog",
       "label": "WriteBlog.jsx",
       "file_type": "code",
@@ -1065,6 +1199,63 @@
       "community": 2
     },
     {
+      "id": "frontend_src_test_admin_test",
+      "label": "admin.test.js",
+      "file_type": "code",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_test_admin_test_admin",
+      "label": "admin",
+      "file_type": "code",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L6",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_test_admin_test_input",
+      "label": "input",
+      "file_type": "code",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L7",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_test_admin_test_record",
+      "label": "record",
+      "file_type": "code",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L9",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_test_admin_test_invalid",
+      "label": "invalid",
+      "file_type": "code",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L10",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_test_admin_test_fails",
+      "label": "fails()",
+      "file_type": "code",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L12",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_test_admin_test_actors",
+      "label": "actors",
+      "file_type": "code",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L39",
+      "_origin": "ast"
+    },
+    {
       "id": "frontend_src_test_auth_test",
       "label": "auth.test.js",
       "file_type": "code",
@@ -1109,6 +1300,81 @@
       "_callable": true,
       "_origin": "ast",
       "community": 0
+    },
+    {
+      "id": "frontend_src_test_community_test",
+      "label": "community.test.jsx",
+      "file_type": "code",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_test_community_test_admin",
+      "label": "admin",
+      "file_type": "code",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L13",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_test_community_test_user",
+      "label": "user",
+      "file_type": "code",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L14",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_test_community_test_record",
+      "label": "record",
+      "file_type": "code",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L15",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_test_community_test_post",
+      "label": "post",
+      "file_type": "code",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L16",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_test_community_test_show",
+      "label": "show()",
+      "file_type": "code",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L18",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_test_community_test_fill",
+      "label": "fill()",
+      "file_type": "code",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L26",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_test_community_test_stat",
+      "label": "stat()",
+      "file_type": "code",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L35",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_test_community_test_routes",
+      "label": "routes",
+      "file_type": "code",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L160",
+      "_origin": "ast"
     },
     {
       "id": "frontend_src_test_posts_test",
@@ -1359,6 +1625,83 @@
       "file_type": "code",
       "source_file": "frontend/src/test/writing.test.jsx",
       "source_location": "L20",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_utils_admin",
+      "label": "admin.js",
+      "file_type": "code",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_utils_admin_admin_labels",
+      "label": "ADMIN_LABELS",
+      "file_type": "code",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L6",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_utils_admin_protected_message",
+      "label": "PROTECTED_MESSAGE",
+      "file_type": "code",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L7",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_utils_admin_self_message",
+      "label": "SELF_MESSAGE",
+      "file_type": "code",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L8",
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_utils_admin_validateadmin",
+      "label": "validateAdmin()",
+      "file_type": "code",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L13",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_utils_admin_candeleteuser",
+      "label": "canDeleteUser()",
+      "file_type": "code",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L21",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_utils_admin_createadminuser",
+      "label": "createAdminUser()",
+      "file_type": "code",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L31",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_utils_admin_deleteuser",
+      "label": "deleteUser()",
+      "file_type": "code",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L62",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "frontend_src_utils_admin_dashboardmetrics",
+      "label": "dashboardMetrics()",
+      "file_type": "code",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L82",
       "_callable": true,
       "_origin": "ast"
     },
@@ -1878,6 +2221,98 @@
       "confidence": "EXTRACTED",
       "source_file": "frontend/e2e/accounts.spec.js",
       "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_e2e_admin_spec",
+      "target": "frontend_e2e_fixtures",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/e2e/admin.spec.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_e2e_admin_spec",
+      "target": "frontend_e2e_fixtures_test",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/e2e/admin.spec.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_e2e_admin_spec",
+      "target": "frontend_e2e_admin_spec_owner",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/e2e/admin.spec.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_e2e_admin_spec",
+      "target": "frontend_e2e_admin_spec_post",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/e2e/admin.spec.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_e2e_admin_spec",
+      "target": "frontend_e2e_admin_spec_nav",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/e2e/admin.spec.js",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_e2e_admin_spec",
+      "target": "frontend_e2e_admin_spec_signin",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/e2e/admin.spec.js",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_e2e_admin_spec",
+      "target": "frontend_e2e_admin_spec_logout",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/e2e/admin.spec.js",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_e2e_admin_spec",
+      "target": "frontend_e2e_admin_spec_create",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/e2e/admin.spec.js",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_e2e_admin_spec",
+      "target": "frontend_e2e_admin_spec_accounts",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/e2e/admin.spec.js",
+      "source_location": "L32",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -2725,7 +3160,7 @@
     },
     {
       "source": "frontend_src_app",
-      "target": "frontend_src_components_avatar",
+      "target": "frontend_src_pages_admindashboard",
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -2736,12 +3171,12 @@
     },
     {
       "source": "frontend_src_app",
-      "target": "frontend_src_components_avatar_avatar",
-      "relation": "imports",
+      "target": "frontend_src_pages_users",
+      "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L17",
+      "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -2752,18 +3187,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L18",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "frontend_src_app",
-      "target": "frontend_src_components_ui_ui",
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L18",
+      "source_location": "L19",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -2774,7 +3198,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L18",
+      "source_location": "L19",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -2785,7 +3209,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L19",
+      "source_location": "L20",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -2796,7 +3220,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L19",
+      "source_location": "L20",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -2807,7 +3231,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L20",
+      "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -2818,17 +3242,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L20",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "frontend_src_app",
-      "target": "frontend_src_app_accounthome",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L23",
+      "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -2838,7 +3252,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L48",
+      "source_location": "L24",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -2848,7 +3262,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L59",
+      "source_location": "L35",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -2975,17 +3389,6 @@
     {
       "source": "frontend_src_components_authenticatednavbar",
       "target": "frontend_src_utils_auth_logout",
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/AuthenticatedNavbar.jsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "frontend_src_components_authenticatednavbar",
-      "target": "frontend_src_utils_auth_rolehome",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -3568,6 +3971,159 @@
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/main.jsx",
       "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_admindashboard",
+      "target": "frontend_src_components_alert",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/AdminDashboard.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_admindashboard",
+      "target": "frontend_src_components_alert_alert",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/AdminDashboard.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_admindashboard",
+      "target": "frontend_src_components_ui",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/AdminDashboard.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_admindashboard",
+      "target": "frontend_src_components_ui_sessiontype",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/AdminDashboard.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_admindashboard",
+      "target": "frontend_src_components_ui_ui",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/AdminDashboard.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_admindashboard",
+      "target": "frontend_src_utils_admin",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/AdminDashboard.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_admindashboard",
+      "target": "frontend_src_utils_admin_dashboardmetrics",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/AdminDashboard.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_admindashboard",
+      "target": "frontend_src_utils_users",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/AdminDashboard.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_admindashboard",
+      "target": "frontend_src_utils_users_listusers",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/AdminDashboard.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_admindashboard",
+      "target": "frontend_src_utils_posts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/AdminDashboard.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_admindashboard",
+      "target": "frontend_src_utils_posts_listposts",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/AdminDashboard.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_admindashboard",
+      "target": "frontend_src_utils_posts_deletepost",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/AdminDashboard.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_admindashboard",
+      "target": "frontend_src_utils_posts_formatpostdate",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/AdminDashboard.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_admindashboard",
+      "target": "frontend_src_pages_admindashboard_admindashboard",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/AdminDashboard.jsx",
+      "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -4357,6 +4913,319 @@
       "_origin": "ast"
     },
     {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_components_field",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_components_field_field",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_components_avatar",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_components_avatar_avatar",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_components_alert",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_components_alert_alert",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_components_ui",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_components_ui_sessiontype",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_components_ui_ui",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_utils_users",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_utils_users_listusers",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_utils_admin",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_utils_admin_createadminuser",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_utils_admin_deleteuser",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_utils_admin_candeleteuser",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_utils_admin_admin_labels",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_utils_admin_protected_message",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_utils_admin_self_message",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_utils_validation",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_utils_validation_requirederrors",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_utils_validation_isrole",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_utils_posts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_utils_posts_formatpostdate",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_pages_users_emptyform",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_pages_users_fixedadmin",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_pages_users_badge",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_pages_users_deletecontrol",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_pages_users_accounttype",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_pages_users_users",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L33",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "frontend_src_pages_writeblog",
       "target": "frontend_src_components_postform",
       "relation": "imports_from",
@@ -4723,6 +5592,176 @@
       "_origin": "ast"
     },
     {
+      "source": "frontend_src_test_admin_test",
+      "target": "frontend_src_utils_admin",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_admin_test",
+      "target": "frontend_src_utils_admin_createadminuser",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_admin_test",
+      "target": "frontend_src_utils_admin_deleteuser",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_admin_test",
+      "target": "frontend_src_utils_admin_candeleteuser",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_admin_test",
+      "target": "frontend_src_utils_admin_dashboardmetrics",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_admin_test",
+      "target": "frontend_src_utils_users",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_admin_test",
+      "target": "frontend_src_utils_users_listusers",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_admin_test",
+      "target": "frontend_src_utils_users_users_key",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_admin_test",
+      "target": "frontend_src_utils_storage",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_admin_test",
+      "target": "frontend_src_utils_storage_writejson",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_admin_test",
+      "target": "frontend_src_test_admin_test_admin",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_admin_test",
+      "target": "frontend_src_test_admin_test_input",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_admin_test",
+      "target": "frontend_src_test_admin_test_record",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_admin_test",
+      "target": "frontend_src_test_admin_test_invalid",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_admin_test",
+      "target": "frontend_src_test_admin_test_fails",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_admin_test",
+      "target": "frontend_src_test_admin_test_actors",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/admin.test.js",
+      "source_location": "L39",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "frontend_src_test_auth_test",
       "target": "frontend_src_utils_auth",
       "relation": "imports_from",
@@ -4913,6 +5952,240 @@
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/test/auth.test.js",
       "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_pages_admindashboard",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_pages_users",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_app",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_utils_users",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_utils_users_listusers",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_utils_users_users_key",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_utils_posts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_utils_posts_listposts",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_utils_posts_posts_key",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_utils_session",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_utils_session_getsession",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_utils_session_session_key",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_utils_storage",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_utils_storage_writejson",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_test_community_test_admin",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_test_community_test_user",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_test_community_test_record",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_test_community_test_post",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_test_community_test_show",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_test_community_test_fill",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_test_community_test_stat",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_test_community_test_routes",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L160",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -5913,6 +7186,273 @@
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/test/writing.test.jsx",
       "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_users",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_users_listusers",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_users_users_key",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_storage",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_storage_writejson",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_validation",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_validation_failure",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_validation_success",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_validation_issession",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_validation_isnonemptystring",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_validation_isrole",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_validation_isuser",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_validation_isisotimestamp",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_validation_normalizeusername",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_validation_requirederrors",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_admin_admin_labels",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_admin_protected_message",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_admin_self_message",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_admin_validateadmin",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_admin_candeleteuser",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_admin_createadminuser",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_admin_deleteuser",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L62",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin",
+      "target": "frontend_src_utils_admin_dashboardmetrics",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L82",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_createadminuser",
+      "target": "frontend_src_utils_admin_validateadmin",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_deleteuser",
+      "target": "frontend_src_utils_admin_validateadmin",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L63",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -7085,6 +8625,28 @@
       "_origin": "ast"
     },
     {
+      "source": "frontend_src_app",
+      "target": "frontend_src_pages_admindashboard_admindashboard",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_app",
+      "target": "frontend_src_pages_users_users",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "frontend_src_main",
       "target": "frontend_src_app_app",
       "relation": "imports",
@@ -7124,6 +8686,39 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/test/accounts.test.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_pages_admindashboard_admindashboard",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_pages_users_users",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_test_community_test",
+      "target": "frontend_src_app_app",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/test/community.test.jsx",
       "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast"
@@ -7184,6 +8779,17 @@
       "_origin": "ast"
     },
     {
+      "source": "frontend_src_pages_users_deletecontrol",
+      "target": "frontend_src_utils_admin_candeleteuser",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "frontend_src_test_reading_test_openapp",
       "target": "frontend_src_utils_storage_writejson",
       "relation": "calls",
@@ -7201,6 +8807,39 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/test/writing.test.jsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_validateadmin",
+      "target": "frontend_src_utils_validation_failure",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_validateadmin",
+      "target": "frontend_src_utils_validation_issession",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_validateadmin",
+      "target": "frontend_src_utils_validation_success",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/admin.js",
       "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast"
@@ -7312,7 +8951,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L60",
+      "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -7324,19 +8963,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L100",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "frontend_src_components_authenticatednavbar_authenticatednavbar",
-      "target": "frontend_src_utils_auth_rolehome",
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/AuthenticatedNavbar.jsx",
-      "source_location": "L44",
+      "source_location": "L94",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -7449,6 +9076,54 @@
       "_origin": "ast"
     },
     {
+      "source": "frontend_src_pages_admindashboard_admindashboard",
+      "target": "frontend_src_utils_posts_listposts",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/pages/AdminDashboard.jsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_admindashboard_admindashboard",
+      "target": "frontend_src_utils_users_listusers",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/pages/AdminDashboard.jsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_admindashboard_admindashboard",
+      "target": "frontend_src_utils_admin_dashboardmetrics",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/pages/AdminDashboard.jsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_admindashboard_admindashboard",
+      "target": "frontend_src_utils_posts_formatpostdate",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/pages/AdminDashboard.jsx",
+      "source_location": "L70",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "frontend_src_pages_blogdetail_blogdetail",
       "target": "frontend_src_utils_posts_getpost",
       "relation": "calls",
@@ -7545,6 +9220,30 @@
       "_origin": "ast"
     },
     {
+      "source": "frontend_src_pages_users_users",
+      "target": "frontend_src_utils_users_listusers",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_pages_users_users",
+      "target": "frontend_src_utils_posts_formatpostdate",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L134",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "frontend_src_test_accounts_test",
       "target": "frontend_src_components_routeguards_guestonly",
       "relation": "indirect_call",
@@ -7577,6 +9276,222 @@
       "confidence_score": 0.8,
       "source_file": "frontend/src/test/accounts.test.jsx",
       "source_location": "L52",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_candeleteuser",
+      "target": "frontend_src_utils_validation_isnonemptystring",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_candeleteuser",
+      "target": "frontend_src_utils_validation_issession",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_createadminuser",
+      "target": "frontend_src_utils_validation_requirederrors",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_createadminuser",
+      "target": "frontend_src_utils_validation_isrole",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_createadminuser",
+      "target": "frontend_src_utils_validation_failure",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_createadminuser",
+      "target": "frontend_src_utils_validation_normalizeusername",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_createadminuser",
+      "target": "frontend_src_utils_users_listusers",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L39",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_createadminuser",
+      "target": "frontend_src_utils_storage_writejson",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L54",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_createadminuser",
+      "target": "frontend_src_utils_validation_success",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L55",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_deleteuser",
+      "target": "frontend_src_utils_validation_isnonemptystring",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_deleteuser",
+      "target": "frontend_src_utils_validation_failure",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_deleteuser",
+      "target": "frontend_src_utils_users_listusers",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L69",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_deleteuser",
+      "target": "frontend_src_utils_storage_writejson",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L73",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_deleteuser",
+      "target": "frontend_src_utils_validation_success",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L74",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_dashboardmetrics",
+      "target": "frontend_src_utils_validation_isuser",
+      "relation": "indirect_call",
+      "context": "argument",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L83",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_dashboardmetrics",
+      "target": "frontend_src_utils_validation_normalizeusername",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L84",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_dashboardmetrics",
+      "target": "frontend_src_utils_validation_isnonemptystring",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L88",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "frontend_src_utils_admin_dashboardmetrics",
+      "target": "frontend_src_utils_validation_isisotimestamp",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/utils/admin.js",
+      "source_location": "L89",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -8170,10 +10085,10 @@
     }
   ],
   "metadata": {
-    "built_at": "2026-10-13T08:14:36.449935+00:00",
+    "built_at": "2026-10-13T08:24:54.038179+00:00",
     "version": "graph_update-v1",
     "codebase_root": "/data/artifacts-v2/T0132PcJVCRTV008113102606573077/developer",
     "force": true,
-    "files_scanned": 48
+    "files_scanned": 54
   }
 }
