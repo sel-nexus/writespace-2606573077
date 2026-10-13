@@ -1,0 +1,94 @@
+/** Exercise accounts through real forms and clicks; only initial entry uses goto. */
+import { test, expect } from './fixtures.js';
+
+test('signup, persisted home, logout, validation and normal sign-in', async ({ page, seedStorage, browserErrors }) => {
+  await seedStorage({});
+  await page.goto('/');
+  await expect(page.getByRole('heading', { name: 'Welcome back.' })).toBeVisible();
+  await page.getByRole('link', { name: 'Create an account' }).first().click();
+  await page.getByRole('button', { name: 'Create account' }).click();
+  await expect(page.getByLabel('Display name')).toBeFocused();
+  await page.getByLabel('Display name').fill('Avery Lane');
+  await page.getByLabel('Username', { exact: true }).fill('Admin');
+  await page.getByLabel('Password', { exact: true }).fill('demo');
+  await page.getByLabel('Confirm password').fill('different');
+  await page.getByRole('button', { name: 'Create account' }).click();
+  await expect(page.getByRole('alert')).toHaveText('Passwords do not match.');
+  await page.getByLabel('Confirm password').fill('demo');
+  await page.getByRole('button', { name: 'Create account' }).click();
+  await expect(page.getByRole('alert')).toHaveText('The admin username is reserved.');
+  await page.getByLabel('Username', { exact: true }).fill('avery');
+  await page.getByRole('button', { name: 'Create account' }).click();
+  await expect(page).toHaveURL(/\/blogs$/);
+  await expect(page.getByRole('heading', { name: 'Hello, Avery Lane.' })).toBeVisible();
+  await expect(page.getByText('user', { exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole('heading', { name: 'Hello, Avery Lane.' })).toBeVisible();
+  const records = await page.evaluate(() => ({
+    users: JSON.parse(localStorage.getItem('writespace_users')),
+    session: JSON.parse(localStorage.getItem('writespace_session'))
+  }));
+  expect(records.users).toHaveLength(1);
+  expect(records.session).toEqual({ userId: records.users[0].id, username: 'avery', displayName: 'Avery Lane', role: 'user' });
+  await page.screenshot({ path: test.info().outputPath('account-home.png'), fullPage: true });
+  await page.getByRole('button', { name: /Avery Lane/ }).click();
+  await page.getByRole('button', { name: 'Log out' }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await page.getByRole('link', { name: 'Create an account' }).first().click();
+  await page.getByLabel('Display name').fill('Other');
+  await page.getByLabel('Username', { exact: true }).fill('AVERY');
+  await page.getByLabel('Password', { exact: true }).fill('demo');
+  await page.getByLabel('Confirm password').fill('demo');
+  await page.getByRole('button', { name: 'Create account' }).click();
+  await expect(page.getByRole('alert')).toHaveText('That username is already in use.');
+  await page.getByRole('link', { name: 'Sign in', exact: true }).last().click();
+  await page.getByLabel('Username', { exact: true }).fill('AVERY');
+  await page.getByLabel('Password', { exact: true }).fill('wrong');
+  await page.getByRole('button', { name: 'Sign in' }).click();
+  await expect(page.getByRole('alert')).toHaveText('Invalid username or password.');
+  await page.getByLabel('Password', { exact: true }).fill('demo');
+  await page.getByRole('button', { name: 'Sign in' }).click();
+  await expect(page.getByRole('heading', { name: 'Hello, Avery Lane.' })).toBeVisible();
+  expect(browserErrors).toEqual([]);
+});
+
+for (const path of ['/blogs', '/blog/example', '/write', '/edit/example', '/admin', '/users']) {
+  test(`guest entry ${path}, fixed admin login and logout`, async ({ page, seedStorage, browserErrors, isMobile }) => {
+    await seedStorage({});
+    await page.goto(path);
+    await expect(page).toHaveURL(/\/login$/);
+    await page.getByLabel('Username', { exact: true }).fill('ADMIN');
+    await page.getByLabel('Password', { exact: true }).fill('admin');
+    await page.getByRole('button', { name: 'Sign in' }).click();
+    await expect(page).toHaveURL(/\/admin$/);
+    await expect(page.getByRole('heading', { name: 'Hello, Admin.' })).toBeVisible();
+    await expect(page.getByText('admin', { exact: true }).last()).toBeVisible();
+    await page.reload();
+    await expect(page.getByRole('heading', { name: 'Hello, Admin.' })).toBeVisible();
+    if (isMobile) await page.getByRole('button', { name: 'Open menu' }).click();
+    await page.getByRole('link', { name: 'Account home' }).click();
+    await page.getByRole('link', { name: 'WriteSpace.' }).click();
+    await expect(page).toHaveURL(/\/$/);
+    await page.getByRole('button', { name: /Admin/ }).click();
+    await page.getByRole('button', { name: 'Log out' }).click();
+    await expect(page.getByRole('heading', { name: 'Welcome back.' })).toBeVisible();
+    expect(await page.evaluate(() => localStorage.getItem('writespace_session'))).toBeNull();
+    expect(browserErrors).toEqual([]);
+  });
+}
+
+for (const role of ['user', 'admin']) {
+  for (const path of ['/login', '/register', '/admin', '/users']) {
+    test(`${role} session entry ${path} resolves role home`, async ({ page, seedStorage, browserErrors }) => {
+      await seedStorage({ writespace_session: { userId: role === 'admin' ? 'admin' : 'u1', username: role, displayName: 'Demo Reader', role } });
+      await page.goto(path);
+      await expect(page).toHaveURL(role === 'admin' ? /\/admin$/ : /\/blogs$/);
+      await expect(page.getByRole('heading', { name: 'Hello, Demo Reader.' })).toBeVisible();
+      await page.getByRole('button', { name: /Demo Reader/ }).click();
+      await page.getByRole('button', { name: 'Log out' }).click();
+      await page.getByRole('link', { name: 'Sign in', exact: true }).first().click();
+      await expect(page).toHaveURL(/\/login$/);
+      expect(browserErrors).toEqual([]);
+    });
+  }
+}
