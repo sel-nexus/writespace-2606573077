@@ -156,12 +156,14 @@ it('signs in fixed admin through App then logs out to the public entry', async (
     <App />
   );
   const actor = userEvent.setup();
+  await actor.click(screen.getByRole('link', { name: 'Start Reading' }));
+  expect(window.location.pathname).toBe('/login');
   await actor.type(screen.getByLabelText('Username'), 'ADMIN'); await actor.type(screen.getByLabelText('Password'), 'admin');
   await actor.click(screen.getByRole('button', { name: 'Sign in' }));
   expect(screen.getByRole('heading', { name: 'Hello, Admin.' })).toBeInTheDocument(); expect(window.location.pathname).toBe('/admin');
   await actor.click(screen.getByRole('button', { name: /Admin/ })); await actor.click(screen.getByRole('button', { name: 'Log out' }));
   expect(getSession().value).toBeNull(); expect(window.location.pathname).toBe('/');
-  expect(screen.getByRole('heading', { name: 'Welcome back.' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: 'Your thoughts. Your space. Beautifully simple.' })).toBeInTheDocument();
 });
 it.each(['corrupt', 'unavailable'])('shows login account-read %s failure without navigation', async (mode) => {
   const changed = vi.fn();
@@ -270,7 +272,11 @@ it('keeps root public for both roles and restores session after remount', () => 
     writeJson(SESSION_KEY, session); window.history.replaceState({}, '', '/'); render(
       <App />
     );
-    expect(window.location.pathname).toBe('/'); expect(screen.getByRole('heading', { name: `Hello, ${session.displayName}.` })).toBeInTheDocument();
+    expect(window.location.pathname).toBe('/');
+    expect(screen.getByRole('heading', { name: 'Your thoughts. Your space. Beautifully simple.' })).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: 'Public navigation' })).toHaveTextContent(session.displayName);
+    expect(screen.getByRole('link', { name: 'Go to Dashboard' })).toHaveAttribute('href', session.role === 'admin' ? '/admin' : '/blogs');
+    expect(getSession().value).toEqual(session);
     cleanup();
   }
 });
@@ -280,5 +286,7 @@ it.each(['corrupt', 'unavailable'])('renders safe guest fallback with a warning 
   render(
     <App />
   );
-  expect(screen.getByRole('status')).toBeInTheDocument(); expect(screen.getByRole('heading', { name: 'Welcome back.' })).toBeInTheDocument();
+  expect(screen.getAllByRole('status').length).toBeGreaterThan(0);
+  expect(screen.getByRole('heading', { name: 'Your thoughts. Your space. Beautifully simple.' })).toBeInTheDocument();
+  expect(screen.getByRole('link', { name: 'Start Reading' })).toHaveAttribute('href', '/login');
 });

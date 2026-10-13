@@ -1,7 +1,10 @@
 /** Compose the accounts slice with one router and a persisted session snapshot. */
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import Landing from './pages/Landing.jsx';
+import { PublicNavbar } from './components/PublicNavbar.jsx';
+import { Footer } from './components/Footer.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import { GuestOnly, RequireAuth, RequireAdmin } from './components/RouteGuards.jsx';
@@ -37,6 +40,17 @@ function AccountHome({ session }) {
 }
 AccountHome.propTypes = { session: sessionType.isRequired };
 
+/** Select navigation inside the single router; root remains public for signed-in roles. @param {object} props @returns {JSX.Element} */
+function RouteNavbar({ session, onSessionChange }) {
+  const { pathname } = useLocation();
+  return session && pathname !== '/' ? (
+    <AuthenticatedNavbar session={session} onSessionChange={onSessionChange} availableFeatures={[]} />
+  ) : (
+    <PublicNavbar session={session} />
+  );
+}
+RouteNavbar.propTypes = { session: sessionType, onSessionChange: PropTypes.func.isRequired };
+
 /** Keep the initial storage warning visible while allowing recovery through forms. @returns {JSX.Element} */
 export default function App() {
   const [bootstrap] = useState(() => getSession());
@@ -53,17 +67,7 @@ export default function App() {
     <BrowserRouter future={{ v7_relativeSplatPath: true }}>
       <div className="min-h-screen bg-background font-sans text-foreground">
         <a href="#main" className="sr-only rounded bg-surface p-3 focus:not-sr-only focus:absolute focus:z-20">Skip to content</a>
-        {session ? (
-          <AuthenticatedNavbar session={session} onSessionChange={sessionChanged} availableFeatures={[]} />
-        ) : (
-          <header className="border-b border-border bg-surface">
-            <nav aria-label="Account entry" className="mx-auto flex max-w-6xl flex-wrap items-center gap-5 px-5 py-4">
-              <Link to="/" className={`mr-auto font-display text-2xl font-bold ${ui.focus}`}>WriteSpace.</Link>
-              <Link to="/login" className={ui.link}>Sign in</Link>
-              <Link to="/register" className={ui.link}>Create an account</Link>
-            </nav>
-          </header>
-        )}
+        <RouteNavbar session={session} onSessionChange={sessionChanged} />
         <main id="main">
           {warning && (
             <div className="mx-auto max-w-5xl px-5 pt-6">
@@ -71,11 +75,7 @@ export default function App() {
             </div>
           )}
           <Routes>
-            <Route path="/" element={session ? (
-              <AccountHome session={session} />
-            ) : (
-              <Login onSessionChange={sessionChanged} />
-            )} />
+            <Route path="/" element={<Landing session={session} />} />
             <Route path="/login" element={
               <GuestOnly session={session}>
                 <Login onSessionChange={sessionChanged} />
@@ -115,6 +115,7 @@ export default function App() {
             <Route path="*" element={<Navigate to={roleHome(session)} replace />} />
           </Routes>
         </main>
+        <Footer />
       </div>
     </BrowserRouter>
   );

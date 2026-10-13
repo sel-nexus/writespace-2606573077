@@ -4,8 +4,8 @@ import { test, expect } from './fixtures.js';
 test('signup, persisted home, logout, validation and normal sign-in', async ({ page, seedStorage, browserErrors }) => {
   await seedStorage({});
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Welcome back.' })).toBeVisible();
-  await page.getByRole('link', { name: 'Create an account' }).first().click();
+  await expect(page.getByRole('heading', { name: 'Your thoughts. Your space. Beautifully simple.' })).toBeVisible();
+  await page.getByRole('link', { name: 'Get Started Free' }).click();
   await page.getByRole('button', { name: 'Create account' }).click();
   await expect(page.getByLabel('Display name')).toBeFocused();
   await page.getByLabel('Display name').fill('Avery Lane');
@@ -34,7 +34,8 @@ test('signup, persisted home, logout, validation and normal sign-in', async ({ p
   await page.getByRole('button', { name: /Avery Lane/ }).click();
   await page.getByRole('button', { name: 'Log out' }).click();
   await expect(page).toHaveURL(/\/$/);
-  await page.getByRole('link', { name: 'Create an account' }).first().click();
+  await expect(page.getByRole('heading', { name: 'Your thoughts. Your space. Beautifully simple.' })).toBeVisible();
+  await page.getByRole('link', { name: 'Get Started Free' }).click();
   await page.getByLabel('Display name').fill('Other');
   await page.getByLabel('Username', { exact: true }).fill('AVERY');
   await page.getByLabel('Password', { exact: true }).fill('demo');
@@ -67,11 +68,14 @@ for (const path of ['/blogs', '/blog/example', '/write', '/edit/example', '/admi
     await expect(page.getByRole('heading', { name: 'Hello, Admin.' })).toBeVisible();
     if (isMobile) await page.getByRole('button', { name: 'Open menu' }).click();
     await page.getByRole('link', { name: 'Account home' }).click();
-    await page.getByRole('link', { name: 'WriteSpace.' }).click();
+    await page.getByRole('link', { name: /WriteSpace/ }).click();
     await expect(page).toHaveURL(/\/$/);
+    await expect(page.getByRole('heading', { name: 'Your thoughts. Your space. Beautifully simple.' })).toBeVisible();
+    await page.getByRole('link', { name: 'Go to Dashboard' }).click();
+    await expect(page).toHaveURL(/\/admin$/);
     await page.getByRole('button', { name: /Admin/ }).click();
     await page.getByRole('button', { name: 'Log out' }).click();
-    await expect(page.getByRole('heading', { name: 'Welcome back.' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Your thoughts. Your space. Beautifully simple.' })).toBeVisible();
     expect(await page.evaluate(() => localStorage.getItem('writespace_session'))).toBeNull();
     expect(browserErrors).toEqual([]);
   });
@@ -86,7 +90,8 @@ for (const role of ['user', 'admin']) {
       await expect(page.getByRole('heading', { name: 'Hello, Demo Reader.' })).toBeVisible();
       await page.getByRole('button', { name: /Demo Reader/ }).click();
       await page.getByRole('button', { name: 'Log out' }).click();
-      await page.getByRole('link', { name: 'Sign in', exact: true }).first().click();
+      await expect(page.getByRole('heading', { name: 'Your thoughts. Your space. Beautifully simple.' })).toBeVisible();
+      await page.getByRole('link', { name: 'Start Reading', exact: true }).click();
       await expect(page).toHaveURL(/\/login$/);
       expect(browserErrors).toEqual([]);
     });
