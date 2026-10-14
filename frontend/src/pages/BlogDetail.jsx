@@ -23,15 +23,25 @@ export default function BlogDetail({ session }) {
   useEffect(() => { setResult(getPost(id)); }, [id]);
   const post = result.ok ? result.value : null;
   return (
-    <section className="mx-auto max-w-3xl space-y-8 px-5 py-16">
-      <Link to="/blogs" className={`${ui.link} inline-flex py-2`}>Back to All Blogs</Link>
+    <section className="mx-auto max-w-3xl space-y-8 px-5 py-16 dark:text-slate-100">
+      <Link
+        to="/blogs"
+        className={`${ui.link} inline-flex py-2 dark:text-primary-300 dark:decoration-primary-700 dark:hover:decoration-primary-300 dark:focus-visible:ring-primary-400`}
+      >
+        Back to All Blogs
+      </Link>
       {!result.ok && <Alert variant="warning" message={result.error.message} />}
       <Alert message={message} />
       {post ? (
-        <article aria-labelledby="post-title" className={`${ui.card} space-y-8`}>
+        <article
+          aria-labelledby="post-title"
+          className={`${ui.card} space-y-8 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100`}
+        >
           <header className="space-y-5">
-            <h1 id="post-title" className="break-words font-display text-4xl font-bold tracking-tight">{post.title}</h1>
-            <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-foreground-muted">
+            <h1 id="post-title" className="break-words font-display text-4xl font-bold tracking-tight">
+              {post.title}
+            </h1>
+            <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-foreground-muted dark:text-slate-300">
               <p className="break-words">By {post.authorName}</p>
               <time dateTime={post.createdAt}>{formatPostDate(post.createdAt)}</time>
             </div>
@@ -39,8 +49,19 @@ export default function BlogDetail({ session }) {
           <p className="break-words whitespace-pre-wrap text-lg leading-relaxed">{post.content}</p>
           {canMutatePost(post, session) && (
             <div className="flex flex-wrap items-center gap-6">
-              <Link to={`/edit/${encodeURIComponent(post.id)}`} className={ui.link}>Edit</Link>
-              <button type="button" onClick={remove} className={ui.button}>Delete</button>
+              <Link
+                to={`/edit/${encodeURIComponent(post.id)}`}
+                className={`${ui.link} dark:text-primary-300 dark:decoration-primary-700 dark:hover:decoration-primary-300 dark:focus-visible:ring-primary-400`}
+              >
+                Edit
+              </Link>
+              <button
+                type="button"
+                onClick={remove}
+                className={`${ui.button} dark:bg-red-700 dark:hover:bg-red-800 dark:focus-visible:ring-red-400 dark:focus-visible:ring-offset-slate-800`}
+              >
+                Delete
+              </button>
             </div>
           )}
         </article>

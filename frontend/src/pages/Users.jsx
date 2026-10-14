@@ -13,7 +13,10 @@ import { formatPostDate } from '../utils/posts.js';
 const emptyForm = { displayName: '', username: '', password: '', role: '' };
 // Display-only identity: no fabricated password, UUID or timestamp is persisted.
 const fixedAdmin = { id: 'admin', displayName: 'Admin', username: 'admin', role: 'admin', createdAt: null };
-const badge = { admin: 'bg-secondary-100 text-secondary-800', user: 'bg-primary-100 text-primary-800' };
+const badge = {
+  admin: 'bg-secondary-100 text-secondary-800 dark:bg-secondary-950 dark:text-secondary-200',
+  user: 'bg-primary-100 text-primary-800 dark:bg-primary-950 dark:text-primary-200'
+};
 
 /** Expose protected-control explanations to mouse and keyboard users. @param {object} props @returns {JSX.Element} */
 function DeleteControl({ account, session, onDelete }) {
@@ -23,11 +26,18 @@ function DeleteControl({ account, session, onDelete }) {
       title={reason || undefined}
       tabIndex={reason ? 0 : undefined}
       aria-label={reason || undefined}
-      className={`inline-flex rounded-control ${ui.focus}`}
+      className={`inline-flex rounded-control ${ui.focus} dark:focus-visible:ring-primary-400 dark:focus-visible:ring-offset-slate-800`}
     >
-      <button type="button" disabled={!canDeleteUser(account.id, session)} title={reason || undefined}
-        aria-label={`Delete account: ${account.username}`} onClick={() => onDelete(account.id)}
-        className={`${ui.focus} min-h-11 rounded-control px-3 font-semibold text-error disabled:cursor-not-allowed disabled:opacity-50`}>Delete</button>
+      <button
+        type="button"
+        disabled={!canDeleteUser(account.id, session)}
+        title={reason || undefined}
+        aria-label={`Delete account: ${account.username}`}
+        onClick={() => onDelete(account.id)}
+        className={`${ui.focus} min-h-11 rounded-control px-3 font-semibold text-error disabled:cursor-not-allowed disabled:opacity-50 dark:text-red-300 dark:enabled:hover:bg-red-950 dark:focus-visible:ring-red-400 dark:focus-visible:ring-offset-slate-800`}
+      >
+        Delete
+      </button>
     </span>
   );
 }
@@ -79,50 +89,81 @@ export default function Users({ session }) {
     setFeedback({ message: 'Account deleted.', variant: 'success' });
   }
   return (
-    <section className="mx-auto max-w-6xl space-y-8 px-5 py-12">
+    <section className="mx-auto max-w-6xl space-y-8 px-5 py-12 dark:text-slate-100">
       <header className="space-y-4">
-        <p className="text-xs font-bold uppercase tracking-[.2em] text-secondary-800">Community administration</p>
+        <p className="text-xs font-bold uppercase tracking-[.2em] text-secondary-800 dark:text-secondary-300">
+          Community administration
+        </p>
         <h1 className="font-display text-4xl font-bold tracking-tight">Manage Users</h1>
-        <p className="max-w-3xl text-sm leading-relaxed text-foreground-muted">
+        <p className="max-w-3xl text-sm leading-relaxed text-foreground-muted dark:text-slate-300">
           Local demo only. Accounts and plaintext passwords stay in this browser. Use demo credentials only.
           Deleting an account does not change its posts or any session. The built-in admin is display-only.
         </p>
       </header>
       {!snapshot.ok && <Alert variant="warning" message={snapshot.error.message} />}
       <Alert message={feedback.message} variant={feedback.variant} />
-      <section aria-labelledby="create-user" className={`${ui.card} space-y-6`}>
+      <section
+        aria-labelledby="create-user"
+        className={`${ui.card} space-y-6 dark:border-slate-700 dark:bg-slate-800`}
+      >
         <h2 id="create-user" className="font-display text-2xl font-bold">Create an account</h2>
         <form noValidate onSubmit={submit} className="grid gap-5 sm:grid-cols-2">
           {Object.entries(ADMIN_LABELS).filter(([key]) => key !== 'role').map(([key, label]) => (
-            <Field key={key} id={key} label={label} type={key === 'password' ? 'password' : 'text'}
-              value={values[key]} error={errors[key]} autoComplete={key === 'password' ? 'new-password' : 'off'}
-              onChange={(event) => setValues({ ...values, [key]: event.target.value })} />
+            <Field
+              key={key}
+              id={key}
+              label={label}
+              type={key === 'password' ? 'password' : 'text'}
+              value={values[key]}
+              error={errors[key]}
+              autoComplete={key === 'password' ? 'new-password' : 'off'}
+              onChange={(event) => setValues({ ...values, [key]: event.target.value })}
+            />
           ))}
           <div className="space-y-2">
             <label htmlFor="role" className="block text-sm font-semibold">Role</label>
-            <select id="role" name="role" required aria-required="true" aria-invalid={Boolean(errors.role)}
-              aria-describedby={errors.role ? 'role-error' : undefined} className={ui.input} value={values.role}
-              onChange={(event) => setValues({ ...values, role: event.target.value })}>
+            <select
+              id="role"
+              name="role"
+              required
+              aria-required="true"
+              aria-invalid={Boolean(errors.role)}
+              aria-describedby={errors.role ? 'role-error' : undefined}
+              className={`${ui.input} dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:focus:ring-primary-400 dark:aria-[invalid=true]:border-red-400`}
+              value={values.role}
+              onChange={(event) => setValues({ ...values, role: event.target.value })}
+            >
               <option value="">Select a role</option>
               <option value="user">User</option>
               <option value="admin">Admin</option>
             </select>
-            {errors.role && <p id="role-error" role="alert" className="text-sm text-error">{errors.role}</p>}
+            {errors.role && (
+              <p id="role-error" role="alert" className="text-sm text-error dark:text-red-300">{errors.role}</p>
+            )}
           </div>
-          <button type="submit" className={`${ui.button} sm:col-span-2 sm:justify-self-start`}>Create account</button>
+          <button
+            type="submit"
+            className={`${ui.button} sm:col-span-2 sm:justify-self-start dark:focus-visible:ring-primary-400 dark:focus-visible:ring-offset-slate-800`}
+          >
+            Create account
+          </button>
         </form>
       </section>
       <section aria-label="Accounts" className="space-y-4">
         <h2 className="font-display text-2xl font-bold">Accounts</h2>
-        <div className="hidden overflow-x-auto rounded-card border border-border bg-surface sm:block">
+        <div
+          className="hidden overflow-x-auto rounded-card border border-border bg-surface sm:block dark:border-slate-700 dark:bg-slate-800"
+        >
           <table className="w-full text-left text-sm">
             <caption className="sr-only">Local accounts including the built-in administrator</caption>
-            <thead className="bg-surface-raised">
+            <thead className="bg-surface-raised dark:bg-slate-900">
               <tr>
-                {['Account', 'Username', 'Role', 'Created date', 'Action'].map((label) => <th key={label} scope="col" className="p-4">{label}</th>)}
+                {['Account', 'Username', 'Role', 'Created date', 'Action'].map((label) => (
+                  <th key={label} scope="col" className="p-4">{label}</th>
+                ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-border dark:divide-slate-700">
               {accounts.map((account) => (
                 <tr key={account.id}>
                   <td className="p-4">
@@ -135,7 +176,9 @@ export default function Users({ session }) {
                   <td className="p-4">
                     <span className={`rounded-full px-3 py-1 font-semibold ${badge[account.role]}`}>{account.role}</span>
                   </td>
-                  <td className="p-4">{account.createdAt ? formatPostDate(account.createdAt) : 'Built-in account'}</td>
+                  <td className="p-4 dark:text-slate-300">
+                    {account.createdAt ? formatPostDate(account.createdAt) : 'Built-in account'}
+                  </td>
                   <td className="p-4">
                     <DeleteControl account={account} session={session} onDelete={remove} />
                   </td>
@@ -146,24 +189,28 @@ export default function Users({ session }) {
         </div>
         <div className="space-y-4 sm:hidden" aria-label="Account cards">
           {accounts.map((account) => (
-            <article key={account.id} aria-label={`Account: ${account.username}`} className="space-y-4 rounded-card border border-border bg-surface p-5">
+            <article
+              key={account.id}
+              aria-label={`Account: ${account.username}`}
+              className="space-y-4 rounded-card border border-border bg-surface p-5 dark:border-slate-700 dark:bg-slate-800"
+            >
               <div className="flex items-center gap-3">
                 <Avatar role={account.role} />
                 <h3 className="break-words font-display text-xl font-bold">{account.displayName}</h3>
               </div>
               <dl className="space-y-3 text-sm">
                 <div>
-                  <dt className="text-foreground-muted">Username</dt>
+                  <dt className="text-foreground-muted dark:text-slate-300">Username</dt>
                   <dd className="break-all">{account.username}</dd>
                 </div>
                 <div>
-                  <dt className="text-foreground-muted">Role</dt>
+                  <dt className="text-foreground-muted dark:text-slate-300">Role</dt>
                   <dd>
                     <span className={`rounded-full px-3 py-1 font-semibold ${badge[account.role]}`}>{account.role}</span>
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-foreground-muted">Created date</dt>
+                  <dt className="text-foreground-muted dark:text-slate-300">Created date</dt>
                   <dd>{account.createdAt ? formatPostDate(account.createdAt) : 'Built-in account'}</dd>
                 </div>
               </dl>

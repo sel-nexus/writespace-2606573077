@@ -31,13 +31,15 @@ export default function AdminDashboard({ session }) {
     setFeedback({ message: 'Post deleted.', variant: 'success' });
   }
   return (
-    <section className="mx-auto max-w-6xl space-y-8 px-5 py-12">
-      <header className="space-y-4 rounded-card bg-gradient-to-br from-secondary-800 to-primary-800 p-6 text-white shadow-focal sm:p-10">
+    <section className="mx-auto max-w-6xl space-y-8 px-5 py-12 dark:text-slate-100">
+      <header
+        className="space-y-4 rounded-card bg-gradient-to-br from-secondary-800 to-primary-800 p-6 text-white shadow-focal sm:p-10"
+      >
         <p className="text-xs font-bold uppercase tracking-[.2em]">Community administration</p>
         <h1 className="font-display text-4xl font-bold tracking-tight">Admin Dashboard</h1>
         <p>Welcome, {session.displayName}. Review your browser-local community.</p>
       </header>
-      <p className="text-sm leading-relaxed text-foreground-muted">
+      <p className="text-sm leading-relaxed text-foreground-muted dark:text-slate-300">
         Local demo only. These counts describe this browser, not a server or synchronized community.
         The built-in admin is a logical account, not a registered record. Other tabs may overwrite simultaneous changes.
       </p>
@@ -45,40 +47,71 @@ export default function AdminDashboard({ session }) {
       {!users.ok && <Alert variant="warning" message={users.error.message} />}
       <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map(([label, count, source]) => (
-          <div key={label} className="space-y-3 rounded-card border border-border bg-surface p-6">
+          <div
+            key={label}
+            className="space-y-3 rounded-card border border-border bg-surface p-6 dark:border-slate-700 dark:bg-slate-800"
+          >
             <dt className="font-semibold">{label}</dt>
-            <dd className="text-4xl font-bold tabular-nums text-primary-800">{count}</dd>
-            <dd className="text-sm text-foreground-muted">{source}</dd>
+            <dd className="text-4xl font-bold tabular-nums text-primary-800 dark:text-primary-300">{count}</dd>
+            <dd className="text-sm text-foreground-muted dark:text-slate-300">{source}</dd>
           </div>
         ))}
       </dl>
       <nav aria-label="Quick actions" className="flex flex-wrap gap-4">
-        <Link to="/write" className={ui.button}>Write New Post</Link>
-        <Link to="/users" className={ui.button}>Manage Users</Link>
+        <Link
+          to="/write"
+          className={`${ui.button} dark:focus-visible:ring-primary-400 dark:focus-visible:ring-offset-slate-900`}
+        >
+          Write New Post
+        </Link>
+        <Link
+          to="/users"
+          className={`${ui.button} dark:focus-visible:ring-primary-400 dark:focus-visible:ring-offset-slate-900`}
+        >
+          Manage Users
+        </Link>
       </nav>
-      <section aria-labelledby="latest-posts" className={`${ui.card} space-y-6`}>
+      <section
+        aria-labelledby="latest-posts"
+        className={`${ui.card} space-y-6 dark:border-slate-700 dark:bg-slate-800`}
+      >
         <h2 id="latest-posts" className="font-display text-2xl font-bold">Latest Posts</h2>
         <Alert message={feedback.message} variant={feedback.variant} />
-        {items.length === 0 && <p className="text-foreground-muted">No posts yet. Be the first to write one!</p>}
-        <ol className="divide-y divide-border">
+        {items.length === 0 && (
+          <p className="text-foreground-muted dark:text-slate-300">No posts yet. Be the first to write one!</p>
+        )}
+        <ol className="divide-y divide-border dark:divide-slate-700">
           {items.slice(0, 5).map((post) => (
             <li key={post.id} className="flex flex-col gap-4 py-5 sm:flex-row sm:items-center">
               <div className="min-w-0 flex-1 space-y-2">
                 <h3 className="break-words font-display text-xl font-bold">
-                  <Link to={`/blog/${encodeURIComponent(post.id)}`} className={ui.link}>{post.title}</Link>
+                  <Link
+                    to={`/blog/${encodeURIComponent(post.id)}`}
+                    className={`${ui.link} dark:text-primary-300 dark:decoration-primary-700 dark:hover:decoration-primary-300 dark:focus-visible:ring-primary-400`}
+                  >
+                    {post.title}
+                  </Link>
                 </h3>
-                <p className="text-sm text-foreground-muted">{post.authorName} · {formatPostDate(post.createdAt)}</p>
+                <p className="text-sm text-foreground-muted dark:text-slate-300">
+                  {post.authorName} · {formatPostDate(post.createdAt)}
+                </p>
               </div>
               <div className="flex gap-4">
                 <Link
                   to={`/edit/${encodeURIComponent(post.id)}`}
                   aria-label={`Edit post: ${post.title}`}
-                  className={`${ui.link} inline-flex min-h-11 items-center`}
+                  className={`${ui.link} inline-flex min-h-11 items-center dark:text-primary-300 dark:decoration-primary-700 dark:hover:decoration-primary-300 dark:focus-visible:ring-primary-400`}
                 >
                   Edit
                 </Link>
-                <button type="button" aria-label={`Delete post: ${post.title}`} onClick={() => remove(post.id)}
-                  className={`${ui.focus} min-h-11 rounded-control px-3 font-semibold text-error`}>Delete</button>
+                <button
+                  type="button"
+                  aria-label={`Delete post: ${post.title}`}
+                  onClick={() => remove(post.id)}
+                  className={`${ui.focus} min-h-11 rounded-control px-3 font-semibold text-error dark:text-red-300 dark:hover:bg-red-950 dark:focus-visible:ring-red-400 dark:focus-visible:ring-offset-slate-800`}
+                >
+                  Delete
+                </button>
               </div>
             </li>
           ))}

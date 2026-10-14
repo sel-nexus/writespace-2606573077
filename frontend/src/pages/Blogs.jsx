@@ -17,9 +17,14 @@ export default function Blogs({ session, writingAvailable = true }) {
   const [result] = useState(() => listPosts());
   const posts = result.ok ? result.value : [];
   return (
-    <section aria-labelledby="blogs-title" className="mx-auto max-w-6xl space-y-8 px-5 py-16">
+    <section
+      aria-labelledby="blogs-title"
+      className="mx-auto max-w-6xl space-y-8 px-5 py-16 dark:text-slate-100"
+    >
       <div>
-        <p className="mb-3 text-xs font-bold uppercase tracking-[.2em] text-primary-700">From this browser</p>
+        <p className="mb-3 text-xs font-bold uppercase tracking-[.2em] text-primary-700 dark:text-primary-300">
+          From this browser
+        </p>
         <h1 id="blogs-title" className="font-display text-hero font-bold tracking-tight">All Blogs</h1>
       </div>
       {!result.ok && <Alert variant="warning" message={result.error.message} />}
@@ -30,12 +35,25 @@ export default function Blogs({ session, writingAvailable = true }) {
           ))}
         </div>
       ) : (
-        <div className={`${ui.card} space-y-6`}>
-          <p className="text-lg leading-relaxed text-foreground-muted">No posts yet. Be the first to write one!</p>
+        <div className={`${ui.card} space-y-6 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100`}>
+          <p className="text-lg leading-relaxed text-foreground-muted dark:text-slate-300">
+            No posts yet. Be the first to write one!
+          </p>
           {writingAvailable ? (
-            <Link to="/write" className={ui.button}>Write a Blog</Link>
+            <Link
+              to="/write"
+              className={`${ui.button} dark:focus-visible:ring-primary-400 dark:focus-visible:ring-offset-slate-800`}
+            >
+              Write a Blog
+            </Link>
           ) : (
-            <button type="button" className={ui.button} disabled>Write a Blog</button>
+            <button
+              type="button"
+              className={`${ui.button} dark:focus-visible:ring-primary-400 dark:focus-visible:ring-offset-slate-800`}
+              disabled
+            >
+              Write a Blog
+            </button>
           )}
         </div>
       )}
