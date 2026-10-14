@@ -11,6 +11,7 @@ __pycache__/
 .DS_Store
 playwright-report/
 test-results/
+BrowserEvidence.zip
 PLAN.md
 todos.yaml
 developer_metadata.json
