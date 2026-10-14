@@ -26,39 +26,62 @@ export default function Login({ onSessionChange }) {
     navigate(roleHome(result.value), { replace: true });
   }
   return (
-    <section className="mx-auto grid w-full max-w-5xl gap-10 px-5 py-12 sm:grid-cols-[1fr_1.1fr] sm:py-20">
+    <section className="mx-auto grid w-full max-w-5xl gap-10 px-5 py-12 sm:grid-cols-[1fr_1.1fr] sm:py-20 dark:text-slate-100">
       <div className="space-y-6 sm:pt-10">
-        <p className="text-xs font-bold uppercase tracking-[.2em] text-primary-700">Your writing space</p>
-        <h1 className="font-display text-hero tracking-tight">Welcome back.</h1>
-        <p className="max-w-sm text-lg leading-relaxed text-foreground-muted">
+        <p className="text-xs font-bold uppercase tracking-[.2em] text-primary-700 dark:text-primary-300">
+          Your writing space
+        </p>
+        <h1 className="font-display text-hero tracking-tight">
+          Welcome back.
+        </h1>
+        <p className="max-w-sm text-lg leading-relaxed text-foreground-muted dark:text-slate-300">
           A little room for your words. Sign in to your account on this browser.
         </p>
-        <p className="max-w-sm border-l-2 border-primary-300 pl-4 text-sm leading-relaxed text-foreground-muted">
+        <p className="max-w-sm border-l-2 border-primary-300 pl-4 text-sm leading-relaxed text-foreground-muted dark:border-primary-500 dark:text-slate-300">
           Local demo only. Passwords are stored as plaintext in this browser.
           Do not use real credentials or sensitive information.
         </p>
       </div>
-      <div className={`${ui.card} space-y-6`}>
-        <h2 className="font-display text-2xl font-bold">Sign in</h2>
+      <div className={`${ui.card} space-y-6 dark:border-slate-700 dark:bg-slate-800`}>
+        <h2 className="font-display text-2xl font-bold">
+          Sign in
+        </h2>
         <form noValidate onSubmit={submit} className="space-y-5">
           {Object.entries(LOGIN_LABELS).map(([key, label]) => (
-            <Field key={key} id={key} label={label} type={key === 'password' ? 'password' : 'text'} value={values[key]}
-              autoComplete={key === 'password' ? 'current-password' : 'username'} error={errors[key]}
-              onChange={(event) => setValues({ ...values, [key]: event.target.value })} />
+            <Field
+              key={key}
+              id={key}
+              label={label}
+              type={key === 'password' ? 'password' : 'text'}
+              value={values[key]}
+              autoComplete={key === 'password' ? 'current-password' : 'username'}
+              error={errors[key]}
+              onChange={(event) => setValues({ ...values, [key]: event.target.value })}
+            />
           ))}
           <Alert message={message} />
-          <button type="submit" className={`${ui.button} w-full`}>Sign in</button>
+          <button
+            type="submit"
+            className={`${ui.button} w-full dark:focus-visible:ring-primary-300 dark:focus-visible:ring-offset-slate-800`}
+          >
+            Sign in
+          </button>
         </form>
-        <p className="rounded-control bg-surface-raised p-4 text-sm text-primary-900">
+        <p className="rounded-control bg-surface-raised p-4 text-sm text-primary-900 dark:bg-slate-900 dark:text-primary-200">
           Demo administrator: username{' '}
           <strong>admin</strong>
           , password{' '}
           <strong>admin</strong>
           .
         </p>
-        <p className="text-sm text-foreground-muted">
+        <p className="text-sm text-foreground-muted dark:text-slate-300">
           New here?{' '}
-          <Link to="/register" className={ui.link}>Create an account</Link>
+          <Link
+            to="/register"
+            className={`${ui.link} dark:text-primary-300 dark:decoration-primary-700 dark:hover:decoration-primary-300 dark:focus-visible:ring-primary-300`}
+          >
+            Create an account
+          </Link>
         </p>
       </div>
     </section>
