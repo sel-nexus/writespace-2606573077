@@ -12,6 +12,15 @@ export function PublicNavbar({ session = null, theme = 'light', onToggle }) {
   const [open, setOpen] = useState(false);
   /** Close the disclosure without changing appearance. @returns {void} */
   const close = () => setOpen(false);
+  /** Return descendant focus to the disclosure trigger before Escape hides it. @param {React.KeyboardEvent} event @returns {void} */
+  function handleEscape(event) {
+    if (event.key !== 'Escape') return;
+    const menu = event.currentTarget;
+    if (open && menu.contains(menu.ownerDocument.activeElement)) {
+      menu.parentElement.querySelector('button[aria-controls="public-navigation"]')?.focus();
+    }
+    close();
+  }
   /** Pair active and inactive navigation colors in both appearances. @param {object} state @returns {string} */
   const navClass = ({ isActive }) => `${ui.focus} dark:focus-visible:ring-primary-400 dark:focus-visible:ring-offset-slate-900 rounded-full px-4 py-3 ${
     isActive
@@ -21,8 +30,13 @@ export function PublicNavbar({ session = null, theme = 'light', onToggle }) {
   return (
     <header className="border-b border-border bg-surface dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
       <nav aria-label="Public navigation" className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 px-5 py-4">
-        <Link to="/" onClick={close} className={`mr-auto font-display text-2xl font-bold ${ui.focus} dark:focus-visible:ring-primary-400 dark:focus-visible:ring-offset-slate-900`}>
-          WriteSpace<span className="text-primary-600 dark:text-primary-400">.</span>
+        <Link
+          to="/"
+          onClick={close}
+          className={`mr-auto font-display text-2xl font-bold ${ui.focus} dark:focus-visible:ring-primary-400 dark:focus-visible:ring-offset-slate-900`}
+        >
+          WriteSpace
+          <span className="text-primary-600 dark:text-primary-400">.</span>
         </Link>
         <ThemeToggle theme={theme} onToggle={onToggle} />
         <button
@@ -36,22 +50,36 @@ export function PublicNavbar({ session = null, theme = 'light', onToggle }) {
         </button>
         <div
           id="public-navigation"
-          onKeyDown={(event) => { if (event.key === 'Escape') close(); }}
+          onKeyDown={handleEscape}
           className={`${open ? 'flex' : 'hidden'} order-last w-full flex-col gap-3 sm:order-none sm:flex sm:w-auto sm:flex-row sm:items-center`}
         >
-          <NavLink to="/" end onClick={close} className={navClass}>Home</NavLink>
+          <NavLink to="/" end onClick={close} className={navClass}>
+            Home
+          </NavLink>
           {session ? (
             <>
               <span className="flex items-center gap-2">
                 <Avatar role={session.role} />
-                <span className="max-w-40 truncate font-semibold">{session.displayName}</span>
+                <span className="max-w-40 truncate font-semibold">
+                  {session.displayName}
+                </span>
               </span>
-              <NavLink to={roleHome(session)} onClick={close} className={navClass}>Dashboard</NavLink>
+              <NavLink to={roleHome(session)} onClick={close} className={navClass}>
+                Dashboard
+              </NavLink>
             </>
           ) : (
             <>
-              <NavLink to="/login" onClick={close} className={navClass}>Login</NavLink>
-              <NavLink to="/register" onClick={close} className={`${ui.button} dark:focus-visible:ring-primary-400 dark:focus-visible:ring-offset-slate-900`}>Get Started</NavLink>
+              <NavLink to="/login" onClick={close} className={navClass}>
+                Login
+              </NavLink>
+              <NavLink
+                to="/register"
+                onClick={close}
+                className={`${ui.button} dark:focus-visible:ring-primary-400 dark:focus-visible:ring-offset-slate-900`}
+              >
+                Get Started
+              </NavLink>
             </>
           )}
         </div>

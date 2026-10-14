@@ -56,8 +56,12 @@ export default function Landing({ session = null }) {
           aria-hidden="true"
           className="relative isolate flex min-h-80 items-center justify-center rounded-card bg-primary-50 p-8 sm:p-12 dark:bg-slate-900"
         >
-          <div className="absolute inset-6 -z-10 rounded-full bg-gradient-to-br from-primary-200 to-secondary-100 opacity-60 blur-2xl dark:from-primary-900 dark:to-secondary-900" />
-          <div className="w-full max-w-xs rotate-[-4deg] rounded-card border border-primary-100 bg-surface p-8 shadow-focal motion-safe:animate-float dark:border-slate-700 dark:bg-slate-800">
+          <div
+            className="absolute inset-6 -z-10 rounded-full bg-gradient-to-br from-primary-200 to-secondary-100 opacity-60 blur-2xl dark:from-primary-900 dark:to-secondary-900"
+          />
+          <div
+            className="w-full max-w-xs rotate-[-4deg] rounded-card border border-primary-100 bg-surface p-8 shadow-focal motion-safe:animate-float dark:border-slate-700 dark:bg-slate-800"
+          >
             <p className="mb-6 text-xs font-bold uppercase tracking-widest text-primary-700 dark:text-primary-300">
               A page of your own
             </p>
@@ -103,7 +107,9 @@ export default function Landing({ session = null }) {
           <Alert variant="warning" message={result.error.message} />
         )}
         {posts.length ? (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 dark:[&>article]:bg-slate-800 dark:[&>article]:border-x-slate-700 dark:[&>article]:border-b-slate-700 dark:[&_time]:text-slate-300 dark:[&>article>p]:text-slate-300 dark:[&_a]:text-primary-300 dark:[&_a]:decoration-primary-700 dark:[&_a:hover]:decoration-primary-300 dark:[&_a:focus-visible]:ring-primary-300">
+          <div
+            className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 dark:[&>article]:bg-slate-800 dark:[&>article]:border-x-slate-700 dark:[&>article]:border-b-slate-700 dark:[&_time]:text-slate-300 dark:[&>article>p]:text-slate-300 dark:[&_a]:text-primary-300 dark:[&_a]:decoration-primary-700 dark:[&_a:hover]:decoration-primary-300 dark:[&_a:focus-visible]:ring-primary-300"
+          >
             {posts.map((post, index) => (
               <PostCard
                 key={post.id}
@@ -114,7 +120,9 @@ export default function Landing({ session = null }) {
             ))}
           </div>
         ) : (
-          <p className="rounded-card border border-dashed border-border bg-surface p-8 text-foreground-muted dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+          <p
+            className="rounded-card border border-dashed border-border bg-surface p-8 text-foreground-muted dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
+          >
             No posts yet — check back soon!
           </p>
         )}
@@ -123,7 +131,9 @@ export default function Landing({ session = null }) {
         aria-label="Local demo disclosure"
         className="mb-16 rounded-card bg-surface-raised p-6 text-sm leading-relaxed text-primary-900 dark:bg-slate-800 dark:text-slate-300"
       >
-        <strong>Demo only.</strong> Posts, accounts, and session are stored only in this browser’s localStorage.
+        <strong>Demo only.</strong>
+        {' '}
+        Posts, accounts, and session are stored only in this browser’s localStorage.
         Passwords are stored in plaintext. Do not use real credentials or sensitive content.
         Data is not encrypted, backed up, or synchronized, and clearing browser storage removes it.
       </aside>

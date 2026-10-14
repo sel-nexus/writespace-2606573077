@@ -199,6 +199,65 @@ describe('root-owned theme lifecycle', () => {
     expect(write.mock.calls).toEqual([[THEME_KEY, 'light']]);
   });
 
+  it('restores the public trigger after Escape from focused Home without changing session or theme', async () => {
+    const savedSession = JSON.stringify(session);
+    localStorage.setItem('writespace_session', savedSession);
+    localStorage.setItem(THEME_KEY, 'dark');
+    const write = vi.spyOn(Storage.prototype, 'setItem');
+    const remove = vi.spyOn(Storage.prototype, 'removeItem');
+    const actor = userEvent.setup();
+    render(<App />);
+    const trigger = screen.getByRole('button', { name: 'Open menu' });
+    await actor.click(trigger);
+    const home = within(screen.getByRole('navigation', { name: 'Public navigation' }))
+      .getByRole('link', { name: 'Home', exact: true });
+    home.focus();
+    expect(home).toHaveFocus();
+
+    await actor.keyboard('{Escape}');
+
+    expect(trigger).toHaveFocus();
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(document.getElementById('public-navigation')).toHaveClass('hidden');
+    expect(window.location.pathname).toBe('/');
+    expect(localStorage.getItem('writespace_session')).toBe(savedSession);
+    expect(localStorage.getItem(THEME_KEY)).toBe('dark');
+    expect(document.documentElement).toHaveClass('dark');
+    expect(screen.getByRole('button', { name: 'Switch to light mode' })).toBeInTheDocument();
+    expect(write).not.toHaveBeenCalled();
+    expect(remove).not.toHaveBeenCalled();
+  });
+
+  it('restores the account trigger after Escape from focused Log out without changing session or theme', async () => {
+    const savedSession = JSON.stringify(session);
+    localStorage.setItem('writespace_session', savedSession);
+    localStorage.setItem(THEME_KEY, 'dark');
+    window.history.replaceState({}, '', '/blogs');
+    const write = vi.spyOn(Storage.prototype, 'setItem');
+    const remove = vi.spyOn(Storage.prototype, 'removeItem');
+    const actor = userEvent.setup();
+    render(<App />);
+    const trigger = screen.getByRole('button', { name: /Avery/ });
+    await actor.click(trigger);
+    const logout = screen.getByRole('button', { name: 'Log out' });
+    logout.focus();
+    expect(logout).toHaveFocus();
+
+    await actor.keyboard('{Escape}');
+
+    expect(trigger).toHaveFocus();
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(document.getElementById('account-actions')).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Log out' })).not.toBeInTheDocument();
+    expect(window.location.pathname).toBe('/blogs');
+    expect(localStorage.getItem('writespace_session')).toBe(savedSession);
+    expect(localStorage.getItem(THEME_KEY)).toBe('dark');
+    expect(document.documentElement).toHaveClass('dark');
+    expect(screen.getByRole('button', { name: 'Switch to light mode' })).toBeInTheDocument();
+    expect(write).not.toHaveBeenCalled();
+    expect(remove).not.toHaveBeenCalled();
+  });
+
   it('activates authenticated theme control while preserving session and disclosures', async () => {
     localStorage.setItem('writespace_session', JSON.stringify(session));
     window.history.replaceState({}, '', '/blogs');

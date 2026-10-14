@@ -23,6 +23,15 @@ export function AuthenticatedNavbar({ session, onSessionChange, availableFeature
   const links = routeLinks.filter((link) => availableFeatures.includes(link.feature) && (!link.admin || session.role === 'admin'));
   /** Close disclosures after navigation without changing appearance. @returns {void} */
   function closeMenus() { setMobileOpen(false); setAccountOpen(false); }
+  /** Return descendant focus to the account trigger before Escape removes its menu. @param {React.KeyboardEvent} event @returns {void} */
+  function handleAccountEscape(event) {
+    if (event.key !== 'Escape') return;
+    const menu = event.currentTarget;
+    if (accountOpen && menu.contains(menu.ownerDocument.activeElement)) {
+      menu.parentElement.querySelector('button[aria-controls="account-actions"]')?.focus();
+    }
+    setAccountOpen(false);
+  }
   /** Retain identity and location when storage removal fails; never touch theme. @returns {void} */
   function handleLogout() {
     const result = logout();
@@ -34,7 +43,11 @@ export function AuthenticatedNavbar({ session, onSessionChange, availableFeature
   return (
     <header className="border-b border-border bg-surface dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
       <nav aria-label="Account navigation" className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 px-5 py-4">
-        <Link to="/" onClick={closeMenus} className={`mr-auto font-display text-2xl font-bold ${ui.focus} dark:focus-visible:ring-primary-400 dark:focus-visible:ring-offset-slate-900`}>
+        <Link
+          to="/"
+          onClick={closeMenus}
+          className={`mr-auto font-display text-2xl font-bold ${ui.focus} dark:focus-visible:ring-primary-400 dark:focus-visible:ring-offset-slate-900`}
+        >
           WriteSpace
           <span className="text-primary-600 dark:text-primary-400">.</span>
         </Link>
@@ -82,11 +95,15 @@ export function AuthenticatedNavbar({ session, onSessionChange, availableFeature
           {accountOpen && (
             <div
               id="account-actions"
-              onKeyDown={(event) => { if (event.key === 'Escape') setAccountOpen(false); }}
+              onKeyDown={handleAccountEscape}
               className="absolute left-0 z-10 mt-3 w-64 space-y-3 rounded-card border border-border bg-surface p-4 shadow-focal sm:left-auto sm:right-0 dark:border-slate-700 dark:bg-slate-900"
             >
               <p className="text-sm text-foreground-muted dark:text-slate-300">Signed in as {session.role}</p>
-              <button type="button" onClick={handleLogout} className={`${ui.button} dark:focus-visible:ring-primary-400 dark:focus-visible:ring-offset-slate-900`}>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className={`${ui.button} dark:focus-visible:ring-primary-400 dark:focus-visible:ring-offset-slate-900`}
+              >
                 Log out
               </button>
               <Alert message={error} />

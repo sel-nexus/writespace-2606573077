@@ -63,7 +63,12 @@ export default function App() {
   return (
     <BrowserRouter future={{ v7_relativeSplatPath: true }}>
       <div className="min-h-screen bg-background font-sans text-foreground dark:bg-slate-950 dark:text-slate-100">
-        <a href="#main" className="sr-only rounded bg-surface p-3 focus:not-sr-only focus:absolute focus:z-20 dark:bg-slate-800 dark:text-slate-100">Skip to content</a>
+        <a
+          href="#main"
+          className="sr-only rounded bg-surface p-3 focus:not-sr-only focus:absolute focus:z-20 dark:bg-slate-800 dark:text-slate-100"
+        >
+          Skip to content
+        </a>
         <RouteNavbar
           session={session}
           onSessionChange={sessionChanged}
