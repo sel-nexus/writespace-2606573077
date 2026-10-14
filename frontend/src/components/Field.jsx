@@ -5,14 +5,31 @@ import { ui } from './ui.js';
 export function Field({ id, label, type = 'text', value, onChange, error = '', required = true, autoComplete = 'off' }) {
   return (
     <div className="space-y-2">
-      <label htmlFor={id} className="block text-sm font-semibold">
+      <label
+        htmlFor={id}
+        className="block text-sm font-semibold dark:text-slate-100"
+      >
         {label}
       </label>
-      <input id={id} name={id} type={type} value={value} onChange={onChange} required={required}
-        aria-required={required} aria-invalid={Boolean(error)} aria-describedby={error ? `${id}-error` : undefined}
-        autoComplete={autoComplete} className={ui.input} />
+      <input
+        id={id}
+        name={id}
+        type={type}
+        value={value}
+        onChange={onChange}
+        required={required}
+        aria-required={required}
+        aria-invalid={Boolean(error)}
+        aria-describedby={error ? `${id}-error` : undefined}
+        autoComplete={autoComplete}
+        className={`${ui.input} dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:focus:ring-primary-300 dark:aria-[invalid=true]:border-red-400`}
+      />
       {error && (
-        <p id={`${id}-error`} role="alert" className="text-sm text-error">
+        <p
+          id={`${id}-error`}
+          role="alert"
+          className="text-sm text-error dark:text-red-300"
+        >
           {error}
         </p>
       )}

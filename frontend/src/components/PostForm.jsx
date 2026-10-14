@@ -28,27 +28,58 @@ export function PostForm({ initialValues = { title: '', content: '' }, onSave, c
     if (!result.ok) setMessage(`Not saved. ${result.error.message}`);
   }
   return (
-    <form noValidate onSubmit={submit} className={`${ui.card} space-y-6`}>
-      <Field id="title" label="Title" value={values.title} error={errors.title}
-        onChange={(event) => setValues({ ...values, title: event.target.value })} />
+    <form
+      noValidate
+      onSubmit={submit}
+      className={`${ui.card} space-y-6 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100`}
+    >
+      <Field
+        id="title"
+        label="Title"
+        value={values.title}
+        error={errors.title}
+        onChange={(event) => setValues({ ...values, title: event.target.value })}
+      />
       <div className="space-y-2">
         <label htmlFor="content" className="block text-sm font-semibold">Content</label>
-        <textarea id="content" name="content" required aria-required="true"
+        <textarea
+          id="content"
+          name="content"
+          required
+          aria-required="true"
           aria-invalid={Boolean(errors.content)}
           aria-describedby={errors.content ? 'content-error content-count' : 'content-count'}
-          value={values.content} className={`${ui.input} min-h-64 resize-y`}
-          onChange={(event) => setValues({ ...values, content: event.target.value })} />
+          value={values.content}
+          className={`${ui.input} min-h-64 resize-y dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:focus:ring-primary-400 dark:aria-[invalid=true]:border-red-400`}
+          onChange={(event) => setValues({ ...values, content: event.target.value })}
+        />
         {errors.content && (
-          <p id="content-error" role="alert" className="text-sm text-error">{errors.content}</p>
+          <p id="content-error" role="alert" className="text-sm text-error dark:text-red-300">{errors.content}</p>
         )}
-        <p id="content-count" aria-live="polite" className="text-sm tabular-nums text-foreground-muted">
+        <p
+          id="content-count"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          className="text-sm tabular-nums text-foreground-muted dark:text-slate-300"
+        >
           {values.content.length} characters
         </p>
       </div>
       <Alert message={message} />
       <div className="flex flex-wrap items-center gap-6">
-        <button type="submit" className={ui.button}>{submitLabel}</button>
-        <Link to={cancelTo} className={ui.link}>Cancel</Link>
+        <button
+          type="submit"
+          className={`${ui.button} dark:focus-visible:ring-primary-400 dark:focus-visible:ring-offset-slate-800`}
+        >
+          {submitLabel}
+        </button>
+        <Link
+          to={cancelTo}
+          className={`${ui.link} dark:text-primary-300 dark:decoration-primary-700 dark:hover:decoration-primary-300 dark:focus-visible:ring-primary-400`}
+        >
+          Cancel
+        </Link>
       </div>
     </form>
   );
