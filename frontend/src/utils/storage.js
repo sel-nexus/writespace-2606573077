@@ -20,6 +20,43 @@ export function writeJson(key, value) {
   try { window.localStorage.setItem(key, raw); return success(undefined); }
   catch { return failure('STORAGE_WRITE_FAILED', 'This change could not be saved in this browser.'); }
 }
+/**
+ * Read plain bytes without parsing JSON or modifying storage.
+ * Args:
+ *   key: The exact browser storage key.
+ * Returns:
+ *   A successful string/null result, or STORAGE_UNAVAILABLE on access failure.
+ * @param {string} key
+ * @returns {import('./validation.js').Result<string|null>}
+ */
+export function readString(key) {
+  try {
+    return success(window.localStorage.getItem(key));
+  } catch {
+    return failure('STORAGE_UNAVAILABLE', 'Browser storage is unavailable.');
+  }
+}
+
+/**
+ * Save a plain string without JSON serialization.
+ * Args:
+ *   key: The exact browser storage key.
+ *   value: The string bytes to persist.
+ * Returns:
+ *   Success, or STORAGE_WRITE_FAILED without throwing on storage faults.
+ * @param {string} key
+ * @param {string} value
+ * @returns {import('./validation.js').Result<void>}
+ */
+export function writeString(key, value) {
+  try {
+    window.localStorage.setItem(key, value);
+    return success(undefined);
+  } catch {
+    return failure('STORAGE_WRITE_FAILED', 'This change could not be saved in this browser.');
+  }
+}
+
 /** Remove only the requested key. @param {string} key @returns {import('./validation.js').Result<void>} */
 export function removeKey(key) {
   try { window.localStorage.removeItem(key); return success(undefined); }

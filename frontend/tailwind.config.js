@@ -1,6 +1,7 @@
 /** Define WriteSpace's light editorial surfaces and restrained brand accents. */
 import colors from 'tailwindcss/colors';
 export default {
+  darkMode: 'class',
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: { extend: {
     colors: {
