@@ -56,7 +56,13 @@ export function PostForm({ initialValues = { title: '', content: '' }, onSave, c
         {errors.content && (
           <p id="content-error" role="alert" className="text-sm text-error dark:text-red-300">{errors.content}</p>
         )}
-        <p id="content-count" aria-live="polite" className="text-sm tabular-nums text-foreground-muted dark:text-slate-300">
+        <p
+          id="content-count"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          className="text-sm tabular-nums text-foreground-muted dark:text-slate-300"
+        >
           {values.content.length} characters
         </p>
       </div>
